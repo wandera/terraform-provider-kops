@@ -45,6 +45,7 @@ func clusterSpecResourceData(data map[string]interface{}) kopsapi.ClusterSpec {
 
 	//clusterspec.SSHAccess = data["ssh_access"].([]string)
 	clusterspec.Subnets = clusterSubnetSpecResourceData(data["subnet"].([]interface{}))
+	clusterspec.Networking = networkingSpecResourceData(data["networking"].([]interface{}))
 	//data["topology"] = resourceDataClusterTopology(clusterspec.Topology)
 	//data["kubernetes_api_access"] = clusterspec.KubernetesAPIAccess
 	//data["additional_policies"] = *clusterspec.AdditionalPolicies
@@ -73,7 +74,7 @@ func resourceDataClusterSpec(cluster *kopsapi.Cluster) []map[string]interface{} 
 	data["secret_store"] = cluster.Spec.SecretStore
 	data["service_cluster_iprange"] = cluster.Spec.ServiceClusterIPRange
 	data["sshkey_name"] = cluster.Spec.SSHKeyName
-	data["networking"] = resourceDataClusterNetworking(cluster.Spec.Networking)
+	data["networking"] = resourceDataNetworkingSpec(cluster.Spec.Networking)
 	data["subnet"] = resourceDataClusterSubnet(cluster.Spec.Subnets)
 	data["topology"] = resourceDataClusterTopology(cluster.Spec.Topology)
 	data["ssh_access"] = cluster.Spec.SSHAccess
@@ -98,40 +99,111 @@ func clusterSubnetSpecResourceData(data []interface{}) []kopsapi.ClusterSubnetSp
 	return subnets
 }
 
-func resourceDataClusterNetworking(spec interface{}) []map[string]interface{} {
+func resourceDataNetworkingSpec(spec *kopsapi.NetworkingSpec) []map[string]interface{} {
 	data := make(map[string]interface{})
 
-	switch spec.(type) {
-	case kopsapi.ClassicNetworkingSpec:
-		data=""
-	case kopsapi.KubenetNetworkingSpec:
-		return nil
-	case kopsapi.ExternalNetworkingSpec:
-		return nil
-	case kopsapi.CNINetworkingSpec:
-		return nil
-	case kopsapi.KopeioNetworkingSpec:
-		return nil
-	case kopsapi.WeaveNetworkingSpec:
-		return nil
-	case kopsapi.FlannelNetworkingSpec:
-		return nil
-	case kopsapi.CalicoNetworkingSpec:
-		return nil
-	case kopsapi.CanalNetworkingSpec:
-		return nil
-	case kopsapi.KuberouterNetworkingSpec:
-		return nil
-	case kopsapi.RomanaNetworkingSpec:
-		return nil
-	case kopsapi.AmazonVPCNetworkingSpec:
-		return nil
-	case kopsapi.CiliumNetworkingSpec:
-		return nil
-
+	if spec.Classic != nil {
+		data["name"] = "classic"
+	}
+	if spec.Kubenet != nil {
+		data["name"] = "kubenet"
+	}
+	if spec.External != nil {
+		data["name"] = "external"
+	}
+	if spec.CNI != nil {
+		data["name"] = "cni"
+	}
+	if spec.Kopeio != nil {
+		data["name"] = "kopeio"
+	}
+	if spec.Weave != nil {
+		data["name"] = "weave"
+	}
+	if spec.Flannel != nil {
+		data["name"] = "flannel"
+	}
+	if spec.Calico != nil {
+		data["name"] = "calico"
+	}
+	if spec.Canal != nil {
+		data["name"] = "canal"
+	}
+	if spec.Kuberouter != nil {
+		data["name"] = "kuberouter"
+	}
+	if spec.Romana != nil {
+		data["name"] = "romana"
+	}
+	if spec.AmazonVPC != nil {
+		data["name"] = "amazonvpc"
+	}
+	if spec.Cilium != nil {
+		data["name"] = "cilium"
 	}
 
 	return []map[string]interface{}{data}
+}
+
+func networkingSpecResourceData(data []interface{}) *kopsapi.NetworkingSpec {
+	spec := data[0].(map[string]interface{})
+
+	switch spec["name"] {
+	case "classic":
+		return &kopsapi.NetworkingSpec{
+			Classic: &kopsapi.ClassicNetworkingSpec{},
+		}
+	case "kubenet":
+		return &kopsapi.NetworkingSpec{
+			Kubenet: &kopsapi.KubenetNetworkingSpec{},
+		}
+	case "external":
+		return &kopsapi.NetworkingSpec{
+			External: &kopsapi.ExternalNetworkingSpec{},
+		}
+	case "cni":
+		return &kopsapi.NetworkingSpec{
+			CNI: &kopsapi.CNINetworkingSpec{},
+		}
+	case "kopeio":
+		return &kopsapi.NetworkingSpec{
+			Kopeio: &kopsapi.KopeioNetworkingSpec{},
+		}
+	case "weave":
+		return &kopsapi.NetworkingSpec{
+			Weave: &kopsapi.WeaveNetworkingSpec{},
+		}
+	case "flannel":
+		return &kopsapi.NetworkingSpec{
+			Flannel: &kopsapi.FlannelNetworkingSpec{},
+		}
+	case "calico":
+		return &kopsapi.NetworkingSpec{
+			Calico: &kopsapi.CalicoNetworkingSpec{},
+		}
+	case "canal":
+		return &kopsapi.NetworkingSpec{
+			Canal: &kopsapi.CanalNetworkingSpec{},
+		}
+	case "kuberouter":
+		return &kopsapi.NetworkingSpec{
+			Kuberouter: &kopsapi.KuberouterNetworkingSpec{},
+		}
+	case "romana":
+		return &kopsapi.NetworkingSpec{
+			Romana: &kopsapi.RomanaNetworkingSpec{},
+		}
+	case "amazonvpc":
+		return &kopsapi.NetworkingSpec{
+			AmazonVPC: &kopsapi.AmazonVPCNetworkingSpec{},
+		}
+	case "cilium":
+		return &kopsapi.NetworkingSpec{
+			Cilium: &kopsapi.CiliumNetworkingSpec{},
+		}
+	default:
+	}
+	return &kopsapi.NetworkingSpec{}
 }
 
 func resourceDataClusterSubnet(subnets []kopsapi.ClusterSubnetSpec) []map[string]interface{} {

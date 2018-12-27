@@ -45,7 +45,6 @@ func schemaClusterSpec() *schema.Schema {
 				"sshkey_name":             schemaStringOptional(),
 				"network_id":              schemaStringOptional(),
 				"network_cidr":            schemaCIDRStringOptional(),
-				"networking":              schemaStringInSliceRequired([]string{"canal", "kuberouter"}),
 				"non_masquerade_cidr":     schemaCIDRStringOptional(),
 				"ssh_access":              schemaStringSliceOptional(),
 				"kubernetes_api_access":   schemaStringSliceOptional(),
@@ -53,6 +52,7 @@ func schemaClusterSpec() *schema.Schema {
 				"subnet":                  schemaClusterSubnet(),
 				"topology":                schemaClusterTopology(),
 				"etcd_cluster":            schemaClusterEtcdCluster(),
+				"networking":              schemaNetworkingSpec(),
 			},
 		},
 	}
@@ -158,6 +158,18 @@ func schemaClusterEtcdCluster() *schema.Schema {
 						},
 					},
 				},
+			},
+		},
+	}
+}
+
+func schemaNetworkingSpec() *schema.Schema {
+	return &schema.Schema{
+		Type:     schema.TypeList,
+		Required: true,
+		Elem: &schema.Resource{
+			Schema: map[string]*schema.Schema{
+				"name": schemaStringRequired(),
 			},
 		},
 	}
