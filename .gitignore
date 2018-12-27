@@ -1,0 +1,10 @@
+hs_err_pid*
+.DS_Store
+.classpath
+.project
+.settings
+.idea
+*.iml
+virt
+dist
+terraform-provider-kops
