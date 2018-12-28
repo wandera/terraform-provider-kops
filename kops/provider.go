@@ -1,60 +1,29 @@
 package kops
 
 import (
+	"fmt"
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
+	"k8s.io/apimachinery/pkg/util/validation/field"
+	"k8s.io/kops/pkg/client/simple"
+	"k8s.io/kops/pkg/client/simple/vfsclientset"
+	"k8s.io/kops/util/pkg/vfs"
 )
+
+type ProviderConfig struct {
+	stateStore string
+	clientset  simple.Clientset
+}
 
 // Provider exported for main package
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"access_key": {
+			"state_store": {
 				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "",
-				Description: descriptions["access_key"],
-			},
-
-			"secret_key": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "",
-				Description: descriptions["secret_key"],
-			},
-
-			"profile": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "",
-				Description: descriptions["profile"],
-			},
-
-			//"assume_role": assumeRoleSchema(),
-
-			"shared_credentials_file": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "",
-				Description: descriptions["shared_credentials_file"],
-			},
-
-			"token": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "",
-				Description: descriptions["token"],
-			},
-
-			"region": {
-				Type:     schema.TypeString,
-				Required: true,
-				DefaultFunc: schema.MultiEnvDefaultFunc([]string{
-					"AWS_REGION",
-					"AWS_DEFAULT_REGION",
-				}, nil),
-				Description:  descriptions["region"],
-				InputDefault: "us-east-1",
+				Required:    true,
+				DefaultFunc: schema.EnvDefaultFunc("KOPS_STATE_STORE", nil),
+				Description: descriptions["state_store"],
 			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
@@ -65,7 +34,28 @@ func Provider() terraform.ResourceProvider {
 			"kops_aws_cluster": resourceCluster(),
 			//"kops_aws_instance_group": resourceInstanceGroup(),
 		},
+		ConfigureFunc: configureProvider,
 	}
+}
+
+func configureProvider(data *schema.ResourceData) (interface{}, error) {
+	registryPath := data.Get("state_store").(string)
+
+	basePath, err := vfs.Context.BuildVfsPath(registryPath)
+	if err != nil {
+		return nil, fmt.Errorf("error building path for %q: %v", registryPath, err)
+	}
+
+	if !vfs.IsClusterReadable(basePath) {
+		return nil, field.Invalid(field.NewPath("State Store"), registryPath, invalidStateError)
+	}
+
+	clientset := vfsclientset.NewVFSClientset(basePath, true)
+
+	return &ProviderConfig{
+		clientset:  clientset,
+		stateStore: registryPath,
+	}, nil
 }
 
 var descriptions map[string]string

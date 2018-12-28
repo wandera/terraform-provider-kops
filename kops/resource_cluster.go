@@ -17,12 +17,6 @@ func resourceCluster() *schema.Resource {
 			State: schema.ImportStatePassthrough,
 		},
 		Schema: map[string]*schema.Schema{
-			"state_store": {
-				Type:        schema.TypeString,
-				Required:    true,
-				DefaultFunc: schema.EnvDefaultFunc("KOPS_STATE_STORE", nil),
-				Description: descriptions["state_store"],
-			},
 			"metadata": schemaMetadata(),
 			"spec":     schemaClusterSpec(),
 		},
@@ -30,29 +24,19 @@ func resourceCluster() *schema.Resource {
 }
 
 func resourceClusterCreate(d *schema.ResourceData, m interface{}) error {
-	clientset, err := GetClientset(d.Get("state_store").(string))
-	if err != nil {
-		return err
-	}
+	clientset := m.(*ProviderConfig).clientset
 
 	cluster, err := clientset.CreateCluster(&kops.Cluster{
 		ObjectMeta: expandClusterMetadata(sectionData(d, "metadata")),
 		Spec:       expandClusterSpec(sectionData(d, "spec")),
 	})
-
 	if err != nil {
 		return err
 	}
 
 	d.SetId(cluster.Name)
 
-	if err := d.Set("metadata", flattenClusterMetadata(cluster)); err != nil {
-		return err
-	}
-	if err := d.Set("spec", flattenClusterSpec(cluster)); err != nil {
-		return err
-	}
-	return nil
+	return setResourceData(cluster, d, m)
 }
 
 func sectionData(d *schema.ResourceData, section string) map[string]interface{} {
@@ -60,7 +44,11 @@ func sectionData(d *schema.ResourceData, section string) map[string]interface{} 
 }
 
 func resourceClusterRead(d *schema.ResourceData, m interface{}) error {
-	return setResourceData(d, m)
+	cluster, err := getCluster(d, m)
+	if err != nil {
+		return err
+	}
+	return setResourceData(cluster, d, m)
 }
 
 func resourceClusterUpdate(d *schema.ResourceData, m interface{}) error {
@@ -68,24 +56,17 @@ func resourceClusterUpdate(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceClusterDelete(d *schema.ResourceData, m interface{}) error {
-	clientset, err := GetClientset(d.Get("state_store").(string))
-	if err != nil {
-		return err
-	}
-	cluster, err := clientset.GetCluster(d.Id())
+	clientset := m.(*ProviderConfig).clientset
+	cluster, err := getCluster(d, m)
 	if err != nil {
 		return err
 	}
 
-	err = clientset.DeleteCluster(cluster)
-
-	return err
+	return clientset.DeleteCluster(cluster)
 }
 
 func resourceClusterExists(d *schema.ResourceData, m interface{}) (bool, error) {
-	clientset, err := GetClientset(d.Get("state_store").(string))
-	_, err = clientset.GetCluster(d.Id())
-
+	_, err := getCluster(d, m)
 	if err != nil {
 		if errors.IsNotFound(err) {
 			return false, nil
@@ -96,22 +77,17 @@ func resourceClusterExists(d *schema.ResourceData, m interface{}) (bool, error) 
 	return true, nil
 }
 
-func setResourceData(d *schema.ResourceData, m interface{}) error {
-	// get cluster
-	clientset, err := GetClientset(d.Get("state_store").(string))
-	if err != nil {
-		return err
-	}
-
+func getCluster(d *schema.ResourceData, m interface{}) (*kops.Cluster, error) {
+	clientset := m.(*ProviderConfig).clientset
 	cluster, err := clientset.GetCluster(d.Id())
-	if err != nil {
-		return err
-	}
+	return cluster, err
+}
 
-	if err := d.Set("metadata", flattenClusterMetadata(cluster)); err != nil {
+func setResourceData(c *kops.Cluster, d *schema.ResourceData, m interface{}) error {
+	if err := d.Set("metadata", flattenClusterMetadata(c)); err != nil {
 		return err
 	}
-	if err := d.Set("spec", flattenClusterSpec(cluster)); err != nil {
+	if err := d.Set("spec", flattenClusterSpec(c)); err != nil {
 		return err
 	}
 	return nil
