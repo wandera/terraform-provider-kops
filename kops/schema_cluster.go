@@ -31,7 +31,7 @@ func schemaClusterSpec() *schema.Schema {
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"channel":                 schemaStringOptional(),
-				"cloud_provider":		   schemaStringOptional(),
+				"cloud_provider":          schemaStringOptional(),
 				"cluster_dnsdomain":       schemaStringOptional(),
 				"config_base":             schemaStringOptional(),
 				"config_store":            schemaStringOptional(),
