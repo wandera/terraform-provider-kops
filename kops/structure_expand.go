@@ -13,13 +13,17 @@ func expandClusterMetadata(data map[string]interface{}) v1.ObjectMeta {
 	meta.Name = data["name"].(string)
 	timestamp, _ := time.Parse("2006-01-02 15:04:05.999999999 -0700 MST", data["creation_timestamp"].(string))
 	meta.CreationTimestamp = v1.Time{Time: timestamp}
+
+	s, _ := json.Marshal(meta)
+	log.Printf("[DEBUG] Metadata: %s", string(s))
+
 	return meta
 }
 
 func expandClusterSpec(data map[string]interface{}) kopsapi.ClusterSpec {
 	clusterspec := kopsapi.ClusterSpec{}
 	clusterspec.Channel = data["channel"].(string)
-	clusterspec.CloudProvider = "aws"
+	clusterspec.CloudProvider = data["cloud_provider"].(string)
 	clusterspec.ClusterDNSDomain = data["cluster_dnsdomain"].(string)
 	clusterspec.ConfigBase = data["config_base"].(string)
 	clusterspec.ConfigStore = data["config_store"].(string)
@@ -36,16 +40,35 @@ func expandClusterSpec(data map[string]interface{}) kopsapi.ClusterSpec {
 	clusterspec.ServiceClusterIPRange = data["service_cluster_iprange"].(string)
 	clusterspec.SSHKeyName = data["sshkey_name"].(string)
 
-	clusterspec.KubernetesAPIAccess = expandStringSlice(data["kubernetes_api_access"].([]interface{}))
-	clusterspec.SSHAccess = expandStringSlice(data["ssh_access"].([]interface{}))
-	clusterspec.Subnets = expandClusterSubnetSpec(data["subnet"].([]interface{}))
-	clusterspec.Networking = expandNetworkingSpec(data["networking"].([]interface{}))
-	clusterspec.EtcdClusters = expandEtcdClusterSpec(data["etcd_cluster"].([]interface{}))
-	clusterspec.Topology = expandClusterTopology(data["topology"].([]interface{}))
-	clusterspec.AdditionalPolicies = expandStringMap(data["additional_policies"].(map[string]interface{}))
+	if top, ok := data["kubernetes_api_access"]; ok {
+		clusterspec.KubernetesAPIAccess = expandStringSlice(top.([]interface{}))
+	}
+	if top, ok := data["ssh_access"]; ok {
+		clusterspec.SSHAccess = expandStringSlice(top.([]interface{}))
+	}
+
+	if top, ok := data["subnet"]; ok {
+		clusterspec.Subnets = expandClusterSubnetSpec(top.([]interface{}))
+	}
+
+	if top, ok := data["networking"]; ok {
+		clusterspec.Networking = expandNetworkingSpec(top.([]interface{}))
+	}
+
+	if top, ok := data["etcd_cluster"]; ok {
+		clusterspec.EtcdClusters = expandEtcdClusterSpec(top.([]interface{}))
+	}
+
+	if top, ok := data["topology"]; ok {
+		clusterspec.Topology = expandClusterTopology(top.([]interface{}))
+	}
+
+	if top, ok := data["additional_policies"]; ok {
+		clusterspec.AdditionalPolicies = expandStringMap(top.(map[string]interface{}))
+	}
 
 	spec, _ := json.Marshal(clusterspec)
-	log.Printf("[DEBUG] Object: %s", string(spec))
+	log.Printf("[DEBUG] Spec: %s", string(spec))
 
 	return clusterspec
 }
@@ -221,22 +244,25 @@ func expandEtcdClusterSpec(data []interface{}) []*kopsapi.EtcdClusterSpec {
 }
 
 func expandEtcdBackupSpec(data []interface{}) *kopsapi.EtcdBackupSpec {
-	backup := &kopsapi.EtcdBackupSpec{}
 	if len(data) > 0 {
 		d := data[0].(map[string]interface{})
+		backup := &kopsapi.EtcdBackupSpec{}
 		backup.BackupStore = d["backup_store"].(string)
 		backup.Image = d["image"].(string)
 	}
-	return backup
+	return nil
 }
 
 func expandEtcdManagerSpec(data []interface{}) *kopsapi.EtcdManagerSpec {
-	manager := &kopsapi.EtcdManagerSpec{}
 	if len(data) > 0 {
-		d := data[0].(map[string]interface{})
-		manager.Image = d["image"].(string)
+		manager := &kopsapi.EtcdManagerSpec{}
+		if len(data) > 0 {
+			d := data[0].(map[string]interface{})
+			manager.Image = d["image"].(string)
+		}
+		return manager
 	}
-	return manager
+	return nil
 }
 
 func expandEtcdMemberSpec(data []interface{}) []*kopsapi.EtcdMemberSpec {

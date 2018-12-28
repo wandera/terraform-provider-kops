@@ -35,11 +35,13 @@ func flattenClusterSpec(cluster *kopsapi.Cluster) []map[string]interface{} {
 	data["sshkey_name"] = cluster.Spec.SSHKeyName
 	data["networking"] = flattenNetworkingSpec(cluster.Spec.Networking)
 	data["subnet"] = flattenClusterSubnet(cluster.Spec.Subnets)
-	data["topology"] = flattenClusterTopology(cluster.Spec.Topology)
+	if cluster.Spec.Topology != nil {
+		data["topology"] = flattenClusterTopology(cluster.Spec.Topology)
+	}
 	data["ssh_access"] = cluster.Spec.SSHAccess
 	data["kubernetes_api_access"] = cluster.Spec.KubernetesAPIAccess
 	data["additional_policies"] = *cluster.Spec.AdditionalPolicies
-	data["etcd_cluster"] = flattenClusterEtcdCluster(cluster.Spec.EtcdClusters)
+	data["etcd_cluster"] = flattenEtcdClusterSpec(cluster.Spec.EtcdClusters)
 
 	return []map[string]interface{}{data}
 }
@@ -105,28 +107,25 @@ func flattenClusterSubnet(subnets []kopsapi.ClusterSubnetSpec) []map[string]inte
 
 func flattenClusterTopology(topology *kopsapi.TopologySpec) []map[string]interface{} {
 	data := make(map[string]interface{})
-	if topology != nil {
-		data["masters"] = topology.Masters
-		data["nodes"] = topology.Nodes
-		if topology.Bastion != nil {
-			data["bastion"] = []map[string]interface{}{
-				{
-					"bastion_public_name":  topology.Bastion.BastionPublicName,
-					"idle_timeout_seconds": int(*topology.Bastion.IdleTimeoutSeconds),
-				},
-			}
-		}
-		data["dns"] = []map[string]interface{}{
+	data["masters"] = topology.Masters
+	data["nodes"] = topology.Nodes
+	if topology.Bastion != nil {
+		data["bastion"] = []map[string]interface{}{
 			{
-				"type": topology.DNS.Type,
+				"bastion_public_name":  topology.Bastion.BastionPublicName,
+				"idle_timeout_seconds": int(*topology.Bastion.IdleTimeoutSeconds),
 			},
 		}
 	}
-
+	data["dns"] = []map[string]interface{}{
+		{
+			"type": topology.DNS.Type,
+		},
+	}
 	return []map[string]interface{}{data}
 }
 
-func flattenClusterEtcdCluster(etcdClusters []*kopsapi.EtcdClusterSpec) []map[string]interface{} {
+func flattenEtcdClusterSpec(etcdClusters []*kopsapi.EtcdClusterSpec) []map[string]interface{} {
 	var data []map[string]interface{}
 
 	for _, cluster := range etcdClusters {
