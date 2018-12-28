@@ -36,18 +36,20 @@ func resourceClusterCreate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	cluster, err := clientset.CreateCluster(&kops.Cluster{
-		ObjectMeta: clusterMetadataResourceData(sectionData(d, "metadata")),
-		Spec:       clusterSpecResourceData(sectionData(d, "spec")),
+		ObjectMeta: expandClusterMetadata(sectionData(d, "metadata")),
+		Spec:       expandClusterSpec(sectionData(d, "spec")),
 	})
 
 	if err != nil {
 		return err
 	}
 
-	if err := d.Set("metadata", resourceDataClusterMetadata(cluster)); err != nil {
+	d.SetId(cluster.Name)
+
+	if err := d.Set("metadata", flattenClusterMetadata(cluster)); err != nil {
 		return err
 	}
-	if err := d.Set("spec", resourceDataClusterSpec(cluster)); err != nil {
+	if err := d.Set("spec", flattenClusterSpec(cluster)); err != nil {
 		return err
 	}
 	return nil
@@ -66,12 +68,24 @@ func resourceClusterUpdate(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceClusterDelete(d *schema.ResourceData, m interface{}) error {
-	return nil
+	clientset, err := GetClientset(d.Get("state_store").(string))
+	if err != nil {
+		return err
+	}
+	cluster, err := clientset.GetCluster(d.Id())
+	if err != nil {
+		return err
+	}
+
+	err = clientset.DeleteCluster(cluster)
+
+	return err
 }
 
 func resourceClusterExists(d *schema.ResourceData, m interface{}) (bool, error) {
 	clientset, err := GetClientset(d.Get("state_store").(string))
-	_, err = clientset.GetCluster(d.Get("metadata.name").(string))
+	_, err = clientset.GetCluster(d.Id())
+
 	if err != nil {
 		if errors.IsNotFound(err) {
 			return false, nil
@@ -85,15 +99,19 @@ func resourceClusterExists(d *schema.ResourceData, m interface{}) (bool, error) 
 func setResourceData(d *schema.ResourceData, m interface{}) error {
 	// get cluster
 	clientset, err := GetClientset(d.Get("state_store").(string))
-	cluster, err := clientset.GetCluster(d.Get("metadata.name").(string))
 	if err != nil {
 		return err
 	}
 
-	if err := d.Set("metadata", resourceDataClusterMetadata(cluster)); err != nil {
+	cluster, err := clientset.GetCluster(d.Id())
+	if err != nil {
 		return err
 	}
-	if err := d.Set("spec", resourceDataClusterSpec(cluster)); err != nil {
+
+	if err := d.Set("metadata", flattenClusterMetadata(cluster)); err != nil {
+		return err
+	}
+	if err := d.Set("spec", flattenClusterSpec(cluster)); err != nil {
 		return err
 	}
 	return nil
