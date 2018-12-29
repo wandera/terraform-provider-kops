@@ -22,6 +22,8 @@ func schemaInstanceGroupSpec() *schema.Schema {
 				"root_volume_optimization": schemaBoolOptional(),
 				"subnets":                  schemaStringSliceRequired(),
 				"zones":                    schemaStringSliceRequired(),
+				"cloud_labels":             schemaStringMap(),
+				"node_labels":              schemaStringMap(),
 			},
 		},
 	}

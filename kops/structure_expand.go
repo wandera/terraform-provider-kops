@@ -301,6 +301,16 @@ func expandInstanceGroupSpec(data map[string]interface{}) kopsapi.InstanceGroupS
 	ig.Image = data["image"].(string)
 	ig.Subnets = expandStringSlice(data["subnets"].([]interface{}))
 	ig.Zones = expandStringSlice(data["zones"].([]interface{}))
+	volumeSize := int32(data["root_volume_size"].(int))
+	volumeType := data["root_volume_type"].(string)
+	volumeIOPS := int32(data["root_volume_iops"].(int))
+	volumeOptimization := data["root_volume_optimization"].(bool)
+	ig.RootVolumeSize = &volumeSize
+	ig.RootVolumeType = &volumeType
+	ig.RootVolumeIops = &volumeIOPS
+	ig.RootVolumeOptimization = &volumeOptimization
+	ig.CloudLabels = *expandStringMap(data["cloud_labels"].(map[string]interface{}))
+	ig.NodeLabels = *expandStringMap(data["node_labels"].(map[string]interface{}))
 	return ig
 }
 
