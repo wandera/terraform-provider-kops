@@ -17,6 +17,7 @@ A valid value follows the format s3://<bucket>.
 Trailing slash will be trimmed.`
 )
 
+// ProviderConfig kops provider config structure
 type ProviderConfig struct {
 	stateStore string
 	clientset  simple.Clientset
@@ -38,7 +39,7 @@ func Provider() terraform.ResourceProvider {
 			"kops_instance_group": dataSourceInstanceGroup(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"kops_cluster": resourceCluster(),
+			"kops_cluster":        resourceCluster(),
 			"kops_instance_group": resourceInstanceGroup(),
 		},
 		ConfigureFunc: configureProvider,

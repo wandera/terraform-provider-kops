@@ -9,24 +9,24 @@ import (
 	"strings"
 )
 
-type InstanceGroupId struct {
+type instanceGroupID struct {
 	clusterName       string
 	instanceGroupName string
 }
 
-func (i InstanceGroupId) String() string {
+func (i instanceGroupID) String() string {
 	return fmt.Sprintf("%s/%s", i.clusterName, i.instanceGroupName)
 }
 
-func ParseInstanceGroupId(id string) InstanceGroupId {
+func parseInstanceGroupID(id string) instanceGroupID {
 	split := strings.Split(id, "/")
 	if len(split) == 2 {
-		return InstanceGroupId{
+		return instanceGroupID{
 			clusterName:       split[0],
 			instanceGroupName: split[1],
 		}
 	}
-	return InstanceGroupId{}
+	return instanceGroupID{}
 }
 
 func resourceInstanceGroup() *schema.Resource {
@@ -63,7 +63,7 @@ func resourceInstanceGroupCreate(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.SetId(InstanceGroupId{
+	d.SetId(instanceGroupID{
 		clusterName:       clusterName,
 		instanceGroupName: instanceGroup.ObjectMeta.Name,
 	}.String())
@@ -95,13 +95,13 @@ func resourceInstanceGroupUpdate(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceInstanceGroupDelete(d *schema.ResourceData, m interface{}) error {
-	groupId := ParseInstanceGroupId(d.Id())
+	groupID := parseInstanceGroupID(d.Id())
 	clientset := m.(*ProviderConfig).clientset
-	cluster, err := clientset.GetCluster(groupId.clusterName)
+	cluster, err := clientset.GetCluster(groupID.clusterName)
 	if err != nil {
 		return err
 	}
-	return clientset.InstanceGroupsFor(cluster).Delete(groupId.instanceGroupName, &v1.DeleteOptions{})
+	return clientset.InstanceGroupsFor(cluster).Delete(groupID.instanceGroupName, &v1.DeleteOptions{})
 }
 
 func resourceInstanceGroupExists(d *schema.ResourceData, m interface{}) (bool, error) {
@@ -117,11 +117,11 @@ func resourceInstanceGroupExists(d *schema.ResourceData, m interface{}) (bool, e
 }
 
 func getInstanceGroup(d *schema.ResourceData, m interface{}) (*kops.InstanceGroup, error) {
-	groupId := ParseInstanceGroupId(d.Id())
+	groupID := parseInstanceGroupID(d.Id())
 	clientset := m.(*ProviderConfig).clientset
-	cluster, err := clientset.GetCluster(groupId.clusterName)
+	cluster, err := clientset.GetCluster(groupID.clusterName)
 	if err != nil {
 		return nil, err
 	}
-	return clientset.InstanceGroupsFor(cluster).Get(groupId.instanceGroupName, v1.GetOptions{})
+	return clientset.InstanceGroupsFor(cluster).Get(groupID.instanceGroupName, v1.GetOptions{})
 }

@@ -96,7 +96,7 @@ func expandClusterTopology(data []interface{}) *kopsapi.TopologySpec {
 		topology.Masters = conv["masters"].(string)
 		topology.Nodes = conv["nodes"].(string)
 		topology.Bastion = expandBastionSpec(conv["bastion"].([]interface{}))
-		topology.DNS = expandDnsSpec(conv["dns"].([]interface{}))
+		topology.DNS = expandDNSSpec(conv["dns"].([]interface{}))
 		return topology
 	}
 	return nil
@@ -116,7 +116,7 @@ func expandBastionSpec(data []interface{}) *kopsapi.BastionSpec {
 	return nil
 }
 
-func expandDnsSpec(data []interface{}) *kopsapi.DNSSpec {
+func expandDNSSpec(data []interface{}) *kopsapi.DNSSpec {
 	if len(data) > 0 {
 		d := data[0].(map[string]interface{})
 		dnsSpec := &kopsapi.DNSSpec{}
@@ -227,13 +227,13 @@ func expandEtcdClusterSpec(data []interface{}) []*kopsapi.EtcdClusterSpec {
 		name := top["name"].(string)
 		image := top["image"].(string)
 		version := top["version"].(string)
-		enableTls := top["enable_etcd_tls"].(bool)
-		enableTlsAuth := top["enable_tls_auth"].(bool)
+		enableTLS := top["enable_etcd_tls"].(bool)
+		enableTLSAuth := top["enable_tls_auth"].(bool)
 
 		spec = append(spec, &kopsapi.EtcdClusterSpec{
 			Name:          name,
-			EnableEtcdTLS: enableTls,
-			EnableTLSAuth: enableTlsAuth,
+			EnableEtcdTLS: enableTLS,
+			EnableTLSAuth: enableTLSAuth,
 			Image:         image,
 			Version:       version,
 			Members:       expandEtcdMemberSpec(top["etcd_member"].([]interface{})),
@@ -278,7 +278,7 @@ func expandEtcdMemberSpec(data []interface{}) []*kopsapi.EtcdMemberSpec {
 		volumeType := member["volume_type"].(string)
 		volumeIops := int32(member["volume_iops"].(int))
 		volumeSize := int32(member["volume_size"].(int))
-		kmsKeyId := member["kms_key_id"].(string)
+		kmsKeyID := member["kms_key_id"].(string)
 		encryptedVolume := member["encrypted_volume"].(bool)
 
 		spec = append(spec, &kopsapi.EtcdMemberSpec{
@@ -287,7 +287,7 @@ func expandEtcdMemberSpec(data []interface{}) []*kopsapi.EtcdMemberSpec {
 			VolumeType:      &volumeType,
 			VolumeIops:      &volumeIops,
 			VolumeSize:      &volumeSize,
-			KmsKeyId:        &kmsKeyId,
+			KmsKeyId:        &kmsKeyID,
 			EncryptedVolume: &encryptedVolume,
 		})
 	}
