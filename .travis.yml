@@ -22,7 +22,8 @@ cache:
 env:
   - GO111MODULE=on
 
-install: true
+install:
+  - go get -u golang.org/x/lint/golint
 
 script:
   - go test -v ./...
