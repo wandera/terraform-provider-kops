@@ -36,11 +36,7 @@ func resourceClusterCreate(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(cluster.Name)
 
-	return setResourceData(cluster, d, m)
-}
-
-func sectionData(d *schema.ResourceData, section string) map[string]interface{} {
-	return d.Get(section).([]interface{})[0].(map[string]interface{})
+	return resourceClusterRead(d, m)
 }
 
 func resourceClusterRead(d *schema.ResourceData, m interface{}) error {
@@ -48,11 +44,33 @@ func resourceClusterRead(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
-	return setResourceData(cluster, d, m)
+	if err := d.Set("metadata", flattenClusterMetadata(cluster)); err != nil {
+		return err
+	}
+	if err := d.Set("spec", flattenClusterSpec(cluster)); err != nil {
+		return err
+	}
+	return nil
 }
 
 func resourceClusterUpdate(d *schema.ResourceData, m interface{}) error {
-	return nil
+	if ok, _ := resourceClusterExists(d, m); !ok {
+		d.SetId("")
+		return nil
+	}
+
+	clientset := m.(*ProviderConfig).clientset
+
+	_, err := clientset.UpdateCluster(&kops.Cluster{
+		ObjectMeta: expandClusterMetadata(sectionData(d, "metadata")),
+		Spec:       expandClusterSpec(sectionData(d, "spec")),
+	}, nil)
+
+	if err != nil {
+		return err
+	}
+
+	return resourceClusterRead(d, m)
 }
 
 func resourceClusterDelete(d *schema.ResourceData, m interface{}) error {
@@ -83,12 +101,6 @@ func getCluster(d *schema.ResourceData, m interface{}) (*kops.Cluster, error) {
 	return cluster, err
 }
 
-func setResourceData(c *kops.Cluster, d *schema.ResourceData, m interface{}) error {
-	if err := d.Set("metadata", flattenClusterMetadata(c)); err != nil {
-		return err
-	}
-	if err := d.Set("spec", flattenClusterSpec(c)); err != nil {
-		return err
-	}
-	return nil
+func sectionData(d *schema.ResourceData, section string) map[string]interface{} {
+	return d.Get(section).([]interface{})[0].(map[string]interface{})
 }

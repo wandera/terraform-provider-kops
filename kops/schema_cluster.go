@@ -33,7 +33,7 @@ func schemaClusterSpec() *schema.Schema {
 				"channel":                 schemaStringOptional(),
 				"cloud_provider":          schemaStringRequired(),
 				"cluster_dnsdomain":       schemaStringOptional(),
-				"config_base":             schemaStringOptional(),
+				"config_base":             schemaStringComputed(),
 				"config_store":            schemaStringOptional(),
 				"dnszone":                 schemaStringOptional(),
 				"key_store":               schemaStringOptional(),
@@ -78,12 +78,12 @@ func schemaClusterSubnet() *schema.Schema {
 func schemaClusterTopology() *schema.Schema {
 	return &schema.Schema{
 		Type:     schema.TypeList,
-		Optional: true,
+		Required: true,
 		MaxItems: 1,
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
-				"masters": schemaStringOptional(),
-				"nodes":   schemaStringOptional(),
+				"masters": schemaStringOptionalDefault("public"),
+				"nodes":   schemaStringOptionalDefault("public"),
 				"bastion": {
 					Type:     schema.TypeList,
 					Optional: true,
@@ -97,11 +97,11 @@ func schemaClusterTopology() *schema.Schema {
 				},
 				"dns": {
 					Type:     schema.TypeList,
-					Optional: true,
+					Required: true,
 					MaxItems: 1,
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
-							"type": schemaStringInSliceOptional([]string{"Public", "Private"}),
+							"type": schemaStringInSliceOptionaDefault([]string{"Public", "Private"}, "Public"),
 						},
 					},
 				},
@@ -183,6 +183,14 @@ func schemaStringOptional() *schema.Schema {
 	}
 }
 
+func schemaStringOptionalDefault(def string) *schema.Schema {
+	return &schema.Schema{
+		Type:     schema.TypeString,
+		Optional: true,
+		Default:  def,
+	}
+}
+
 func schemaStringRequired() *schema.Schema {
 	return &schema.Schema{
 		Type:     schema.TypeString,
@@ -226,6 +234,15 @@ func schemaStringInSliceOptional(slice []string) *schema.Schema {
 		Type:         schema.TypeString,
 		Optional:     true,
 		ValidateFunc: validation.StringInSlice(slice, false),
+	}
+}
+
+func schemaStringInSliceOptionaDefault(slice []string, def string) *schema.Schema {
+	return &schema.Schema{
+		Type:         schema.TypeString,
+		Optional:     true,
+		ValidateFunc: validation.StringInSlice(slice, false),
+		Default:      def,
 	}
 }
 
