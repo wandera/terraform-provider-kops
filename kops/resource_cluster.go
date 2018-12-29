@@ -27,7 +27,7 @@ func resourceClusterCreate(d *schema.ResourceData, m interface{}) error {
 	clientset := m.(*ProviderConfig).clientset
 
 	cluster, err := clientset.CreateCluster(&kops.Cluster{
-		ObjectMeta: expandClusterMetadata(sectionData(d, "metadata")),
+		ObjectMeta: expandObjectMeta(sectionData(d, "metadata")),
 		Spec:       expandClusterSpec(sectionData(d, "spec")),
 	})
 	if err != nil {
@@ -44,10 +44,10 @@ func resourceClusterRead(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
-	if err := d.Set("metadata", flattenClusterMetadata(cluster)); err != nil {
+	if err := d.Set("metadata", flattenObjectMeta(cluster.ObjectMeta)); err != nil {
 		return err
 	}
-	if err := d.Set("spec", flattenClusterSpec(cluster)); err != nil {
+	if err := d.Set("spec", flattenClusterSpec(cluster.Spec)); err != nil {
 		return err
 	}
 	return nil
@@ -62,7 +62,7 @@ func resourceClusterUpdate(d *schema.ResourceData, m interface{}) error {
 	clientset := m.(*ProviderConfig).clientset
 
 	_, err := clientset.UpdateCluster(&kops.Cluster{
-		ObjectMeta: expandClusterMetadata(sectionData(d, "metadata")),
+		ObjectMeta: expandObjectMeta(sectionData(d, "metadata")),
 		Spec:       expandClusterSpec(sectionData(d, "spec")),
 	}, nil)
 

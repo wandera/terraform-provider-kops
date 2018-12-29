@@ -5,5 +5,13 @@ import (
 )
 
 func dataSourceInstanceGroup() *schema.Resource {
-	return &schema.Resource{}
+	return &schema.Resource{
+		Read: resourceInstanceGroupRead,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
+		Schema: map[string]*schema.Schema{
+			"metadata": schemaMetadata(),
+		},
+	}
 }

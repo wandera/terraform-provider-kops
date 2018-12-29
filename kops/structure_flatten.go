@@ -1,47 +1,48 @@
 package kops
 
 import (
+	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	kopsapi "k8s.io/kops/pkg/apis/kops"
 )
 
-func flattenClusterMetadata(cluster *kopsapi.Cluster) []map[string]interface{} {
+func flattenObjectMeta(cluster v1.ObjectMeta) []map[string]interface{} {
 	data := make(map[string]interface{})
 
-	data["name"] = cluster.ObjectMeta.Name
-	data["creation_timestamp"] = cluster.ObjectMeta.CreationTimestamp.String()
+	data["name"] = cluster.Name
+	data["creation_timestamp"] = cluster.CreationTimestamp.String()
 
 	return []map[string]interface{}{data}
 }
 
-func flattenClusterSpec(cluster *kopsapi.Cluster) []map[string]interface{} {
+func flattenClusterSpec(cluster kopsapi.ClusterSpec) []map[string]interface{} {
 	data := make(map[string]interface{})
 
-	data["channel"] = cluster.Spec.Channel
-	data["cloud_provider"] = cluster.Spec.CloudProvider
-	data["cluster_dnsdomain"] = cluster.Spec.ClusterDNSDomain
-	data["config_base"] = cluster.Spec.ConfigBase
-	data["config_store"] = cluster.Spec.ConfigStore
-	data["dnszone"] = cluster.Spec.DNSZone
-	data["key_store"] = cluster.Spec.KeyStore
-	data["kubernetes_version"] = cluster.Spec.KubernetesVersion
-	data["master_internal_name"] = cluster.Spec.MasterInternalName
-	data["master_public_name"] = cluster.Spec.MasterPublicName
-	data["network_cidr"] = cluster.Spec.NetworkCIDR
-	data["network_id"] = cluster.Spec.NetworkID
-	data["non_masquerade_cidr"] = cluster.Spec.NonMasqueradeCIDR
-	data["project"] = cluster.Spec.Project
-	data["secret_store"] = cluster.Spec.SecretStore
-	data["service_cluster_iprange"] = cluster.Spec.ServiceClusterIPRange
-	data["sshkey_name"] = cluster.Spec.SSHKeyName
-	data["networking"] = flattenNetworkingSpec(cluster.Spec.Networking)
-	data["subnet"] = flattenClusterSubnet(cluster.Spec.Subnets)
-	if cluster.Spec.Topology != nil {
-		data["topology"] = flattenClusterTopology(cluster.Spec.Topology)
+	data["channel"] = cluster.Channel
+	data["cloud_provider"] = cluster.CloudProvider
+	data["cluster_dnsdomain"] = cluster.ClusterDNSDomain
+	data["config_base"] = cluster.ConfigBase
+	data["config_store"] = cluster.ConfigStore
+	data["dnszone"] = cluster.DNSZone
+	data["key_store"] = cluster.KeyStore
+	data["kubernetes_version"] = cluster.KubernetesVersion
+	data["master_internal_name"] = cluster.MasterInternalName
+	data["master_public_name"] = cluster.MasterPublicName
+	data["network_cidr"] = cluster.NetworkCIDR
+	data["network_id"] = cluster.NetworkID
+	data["non_masquerade_cidr"] = cluster.NonMasqueradeCIDR
+	data["project"] = cluster.Project
+	data["secret_store"] = cluster.SecretStore
+	data["service_cluster_iprange"] = cluster.ServiceClusterIPRange
+	data["sshkey_name"] = cluster.SSHKeyName
+	data["networking"] = flattenNetworkingSpec(cluster.Networking)
+	data["subnet"] = flattenClusterSubnet(cluster.Subnets)
+	if cluster.Topology != nil {
+		data["topology"] = flattenClusterTopology(cluster.Topology)
 	}
-	data["ssh_access"] = cluster.Spec.SSHAccess
-	data["kubernetes_api_access"] = cluster.Spec.KubernetesAPIAccess
-	data["additional_policies"] = *cluster.Spec.AdditionalPolicies
-	data["etcd_cluster"] = flattenEtcdClusterSpec(cluster.Spec.EtcdClusters)
+	data["ssh_access"] = cluster.SSHAccess
+	data["kubernetes_api_access"] = cluster.KubernetesAPIAccess
+	data["additional_policies"] = *cluster.AdditionalPolicies
+	data["etcd_cluster"] = flattenEtcdClusterSpec(cluster.EtcdClusters)
 
 	return []map[string]interface{}{data}
 }

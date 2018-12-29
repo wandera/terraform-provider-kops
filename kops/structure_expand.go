@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func expandClusterMetadata(data map[string]interface{}) v1.ObjectMeta {
+func expandObjectMeta(data map[string]interface{}) v1.ObjectMeta {
 	meta := v1.ObjectMeta{}
 	meta.Name = data["name"].(string)
 	timestamp, _ := time.Parse("2006-01-02 15:04:05.999999999 -0700 MST", data["creation_timestamp"].(string))

@@ -10,6 +10,13 @@ import (
 	"k8s.io/kops/util/pkg/vfs"
 )
 
+const (
+	invalidStateError = `Unable to read state store s3 bucket.
+Please use a valid s3 bucket uri on state_store attribute or KOPS_STATE_STORE env var.
+A valid value follows the format s3://<bucket>.
+Trailing slash will be trimmed.`
+)
+
 type ProviderConfig struct {
 	stateStore string
 	clientset  simple.Clientset
@@ -32,7 +39,7 @@ func Provider() terraform.ResourceProvider {
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"kops_cluster": resourceCluster(),
-			//"kops_aws_instance_group": resourceInstanceGroup(),
+			"kops_instance_group": resourceInstanceGroup(),
 		},
 		ConfigureFunc: configureProvider,
 	}
