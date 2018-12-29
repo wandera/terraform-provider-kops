@@ -57,13 +57,14 @@ func resourceInstanceGroupCreate(d *schema.ResourceData, m interface{}) error {
 
 	instanceGroup, err := clientset.InstanceGroupsFor(cluster).Create(&kops.InstanceGroup{
 		ObjectMeta: expandObjectMeta(sectionData(d, "metadata")),
+		Spec:       expandInstanceGroupSpec(sectionData(d, "spec")),
 	})
 	if err != nil {
 		return err
 	}
 
 	d.SetId(InstanceGroupId{
-		clusterName:       instanceGroup.ClusterName,
+		clusterName:       clusterName,
 		instanceGroupName: instanceGroup.ObjectMeta.Name,
 	}.String())
 
@@ -76,6 +77,9 @@ func resourceInstanceGroupRead(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 	if err := d.Set("metadata", flattenObjectMeta(instanceGroup.ObjectMeta)); err != nil {
+		return err
+	}
+	if err := d.Set("spec", flattenInstanceGroupSpec(instanceGroup.Spec)); err != nil {
 		return err
 	}
 	return nil

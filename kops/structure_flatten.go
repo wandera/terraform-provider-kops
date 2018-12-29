@@ -194,3 +194,11 @@ func flattenEtcdClusterSpec(etcdClusters []*kopsapi.EtcdClusterSpec) []map[strin
 
 	return data
 }
+
+func flattenInstanceGroupSpec(ig kopsapi.InstanceGroupSpec) []map[string]interface{} {
+	data := make(map[string]interface{})
+	data["role"] = ig.Role
+	data["subnets"] = ig.Subnets
+	data["zones"] = ig.Zones
+	return []map[string]interface{}{data}
+}

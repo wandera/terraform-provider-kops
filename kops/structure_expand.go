@@ -294,3 +294,25 @@ func expandEtcdMemberSpec(data []interface{}) []*kopsapi.EtcdMemberSpec {
 
 	return spec
 }
+
+func expandInstanceGroupSpec(data map[string]interface{}) kopsapi.InstanceGroupSpec {
+	ig := kopsapi.InstanceGroupSpec{}
+	ig.Role = expandInstanceGroupRole(data["role"].(string))
+	ig.Image = data["image"].(string)
+	ig.Subnets = expandStringSlice(data["subnets"].([]interface{}))
+	ig.Zones = expandStringSlice(data["zones"].([]interface{}))
+	return ig
+}
+
+func expandInstanceGroupRole(s string) kopsapi.InstanceGroupRole {
+	switch s {
+	case "Master":
+		return kopsapi.InstanceGroupRoleMaster
+	case "Node":
+		return kopsapi.InstanceGroupRoleNode
+	case "Bastion":
+		return kopsapi.InstanceGroupRoleBastion
+	}
+
+	return kopsapi.InstanceGroupRoleNode
+}

@@ -107,6 +107,14 @@ func schemaBoolOptional() *schema.Schema {
 	}
 }
 
+func schemaStringSliceRequired() *schema.Schema {
+	return &schema.Schema{
+		Type:     schema.TypeList,
+		Required: true,
+		Elem:     &schema.Schema{Type: schema.TypeString},
+	}
+}
+
 func schemaStringSliceOptional() *schema.Schema {
 	return &schema.Schema{
 		Type:     schema.TypeList,
