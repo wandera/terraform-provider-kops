@@ -91,6 +91,21 @@ func resourceInstanceGroupUpdate(d *schema.ResourceData, m interface{}) error {
 		return nil
 	}
 
+	clusterName := d.Get("cluster_name").(string)
+	clientset := m.(*ProviderConfig).clientset
+	cluster, err := clientset.GetCluster(clusterName)
+	if err != nil {
+		return err
+	}
+
+	_, err = clientset.InstanceGroupsFor(cluster).Update(&kops.InstanceGroup{
+		ObjectMeta: expandObjectMeta(sectionData(d, "metadata")),
+		Spec:       expandInstanceGroupSpec(sectionData(d, "spec")),
+	})
+	if err != nil {
+		return err
+	}
+
 	return resourceInstanceGroupRead(d, m)
 }
 
