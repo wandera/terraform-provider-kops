@@ -95,18 +95,19 @@ func expandClusterTopology(data []interface{}) *kopsapi.TopologySpec {
 		conv := data[0].(map[string]interface{})
 		topology.Masters = conv["masters"].(string)
 		topology.Nodes = conv["nodes"].(string)
-		topology.Bastion = expandBastionSpec(conv["bastion"].(map[string]interface{}))
-		topology.DNS = expandDnsSpec(conv["dns"].(map[string]interface{}))
+		topology.Bastion = expandBastionSpec(conv["bastion"].([]interface{}))
+		topology.DNS = expandDnsSpec(conv["dns"].([]interface{}))
 		return topology
 	}
 	return nil
 }
 
-func expandBastionSpec(data map[string]interface{}) *kopsapi.BastionSpec {
+func expandBastionSpec(data []interface{}) *kopsapi.BastionSpec {
 	if len(data) > 0 {
+		d := data[0].(map[string]interface{})
 		bastion := &kopsapi.BastionSpec{}
-		name := data["bastion_public_name"].(string)
-		timeout := int64(data["idle_timeout_seconds"].(int))
+		name := d["bastion_public_name"].(string)
+		timeout := int64(d["idle_timeout_seconds"].(int))
 
 		bastion.BastionPublicName = name
 		bastion.IdleTimeoutSeconds = &timeout
@@ -115,10 +116,11 @@ func expandBastionSpec(data map[string]interface{}) *kopsapi.BastionSpec {
 	return nil
 }
 
-func expandDnsSpec(data map[string]interface{}) *kopsapi.DNSSpec {
+func expandDnsSpec(data []interface{}) *kopsapi.DNSSpec {
 	if len(data) > 0 {
+		d := data[0].(map[string]interface{})
 		dnsSpec := &kopsapi.DNSSpec{}
-		switch data["type"].(string) {
+		switch d["type"].(string) {
 		case "Private":
 			dnsSpec.Type = kopsapi.DNSTypePrivate
 		case "Public":
