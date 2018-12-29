@@ -87,6 +87,6 @@ require (
 	k8s.io/client-go v7.0.0+incompatible // indirect
 	k8s.io/kops v1.10.0
 	k8s.io/kube-openapi v0.0.0-20180731170545-e3762e86a74c // indirect
-	k8s.io/kubernetes v1.10.1
+	k8s.io/kubernetes v1.10.1 // indirect
 	k8s.io/utils v0.0.0-20180918230422-cd34563cd63c // indirect
 )
