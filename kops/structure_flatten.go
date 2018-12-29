@@ -198,6 +198,7 @@ func flattenEtcdClusterSpec(etcdClusters []*kopsapi.EtcdClusterSpec) []map[strin
 func flattenInstanceGroupSpec(ig kopsapi.InstanceGroupSpec) []map[string]interface{} {
 	data := make(map[string]interface{})
 	data["role"] = ig.Role
+	data["machine_type"] = ig.MachineType
 	data["image"] = ig.Image
 	data["subnets"] = ig.Subnets
 	data["zones"] = ig.Zones
@@ -212,6 +213,12 @@ func flattenInstanceGroupSpec(ig kopsapi.InstanceGroupSpec) []map[string]interfa
 	}
 	if ig.RootVolumeOptimization != nil {
 		data["root_volume_optimization"] = *ig.RootVolumeOptimization
+	}
+	if ig.MinSize != nil {
+		data["min_size"] = *ig.MinSize
+	}
+	if ig.MaxSize != nil {
+		data["max_size"] = *ig.MaxSize
 	}
 	data["cloud_labels"] = ig.CloudLabels
 	data["node_labels"] = ig.NodeLabels

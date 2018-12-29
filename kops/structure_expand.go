@@ -298,19 +298,40 @@ func expandEtcdMemberSpec(data []interface{}) []*kopsapi.EtcdMemberSpec {
 func expandInstanceGroupSpec(data map[string]interface{}) kopsapi.InstanceGroupSpec {
 	ig := kopsapi.InstanceGroupSpec{}
 	ig.Role = expandInstanceGroupRole(data["role"].(string))
+	ig.MachineType = data["machine_type"].(string)
 	ig.Image = data["image"].(string)
 	ig.Subnets = expandStringSlice(data["subnets"].([]interface{}))
 	ig.Zones = expandStringSlice(data["zones"].([]interface{}))
-	volumeSize := int32(data["root_volume_size"].(int))
-	volumeType := data["root_volume_type"].(string)
-	volumeIOPS := int32(data["root_volume_iops"].(int))
-	volumeOptimization := data["root_volume_optimization"].(bool)
-	ig.RootVolumeSize = &volumeSize
-	ig.RootVolumeType = &volumeType
-	ig.RootVolumeIops = &volumeIOPS
-	ig.RootVolumeOptimization = &volumeOptimization
-	ig.CloudLabels = *expandStringMap(data["cloud_labels"].(map[string]interface{}))
-	ig.NodeLabels = *expandStringMap(data["node_labels"].(map[string]interface{}))
+	if rvs, ok := data["root_volume_size"]; ok {
+		volumeSize := int32(rvs.(int))
+		ig.RootVolumeSize = &volumeSize
+	}
+	if rvt, ok := data["root_volume_type"]; ok {
+		volumeType := rvt.(string)
+		ig.RootVolumeType = &volumeType
+	}
+	if rvi, ok := data["root_volume_iops"]; ok {
+		volumeIOPS := int32(rvi.(int))
+		ig.RootVolumeIops = &volumeIOPS
+	}
+	if rvo, ok := data["root_volume_optimization"]; ok {
+		volumeOptimization := rvo.(bool)
+		ig.RootVolumeOptimization = &volumeOptimization
+	}
+	if ms, ok := data["min_size"]; ok {
+		minSize := int32(ms.(int))
+		ig.MinSize = &minSize
+	}
+	if ms, ok := data["max_size"]; ok {
+		maxSize := int32(ms.(int))
+		ig.MaxSize = &maxSize
+	}
+	if cl, ok := data["cloud_labels"]; ok {
+		ig.CloudLabels = *expandStringMap(cl.(map[string]interface{}))
+	}
+	if nl, ok := data["node_labels"]; ok {
+		ig.NodeLabels = *expandStringMap(nl.(map[string]interface{}))
+	}
 	return ig
 }
 
