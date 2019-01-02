@@ -332,7 +332,85 @@ func expandInstanceGroupSpec(data map[string]interface{}) kopsapi.InstanceGroupS
 	if nl, ok := data["node_labels"]; ok {
 		ig.NodeLabels = *expandStringMap(nl.(map[string]interface{}))
 	}
+
+	ig.AdditionalSecurityGroups = expandStringSlice(data["additional_security_groups"].([]interface{}))
+	ig.AdditionalUserData = expandAdditionalUserData(data["additional_user_data"].([]interface{}))
+	if api, ok := data["associate_public_ip"]; ok {
+		associate := api.(bool)
+		ig.AssociatePublicIP = &associate
+	}
+	if dim, ok := data["detailed_instance_monitoring"]; ok {
+		detailed := dim.(bool)
+		ig.DetailedInstanceMonitoring = &detailed
+	}
+	ig.ExternalLoadBalancers = expandExternalLoadBalancers(data["external_load_balancer"].([]interface{}))
+	ig.FileAssets = expandFileAssetSpec(data["file_asset"].([]interface{}))
+
 	return ig
+}
+
+func expandFileAssetSpec(data []interface{}) []kopsapi.FileAssetSpec {
+	var fileAssets []kopsapi.FileAssetSpec
+
+	for _, d := range data {
+		fas := d.(map[string]interface{})
+		name := fas["name"].(string)
+		path := fas["path"].(string)
+		content := fas["content"].(string)
+		isBase64 := fas["is_base64"].(bool)
+		rolesString := expandStringSlice(fas["roles"].([]interface{}))
+		roles := make([]kopsapi.InstanceGroupRole, len(rolesString))
+
+		for i, role := range rolesString {
+			roles[i] = expandInstanceGroupRole(role)
+		}
+
+		fileAssets = append(fileAssets, kopsapi.FileAssetSpec{
+			Name:     name,
+			Path:     path,
+			Content:  content,
+			IsBase64: isBase64,
+			Roles:    roles,
+		})
+	}
+
+	return fileAssets
+}
+
+func expandExternalLoadBalancers(data []interface{}) []kopsapi.LoadBalancer {
+	var loadBalancers []kopsapi.LoadBalancer
+
+	for _, d := range data {
+		if d != nil {
+			lb := d.(map[string]interface{})
+			name := lb["load_balancer_name"].(string)
+			target := lb["target_group_arn"].(string)
+
+			loadBalancers = append(loadBalancers, kopsapi.LoadBalancer{
+				LoadBalancerName: &name,
+				TargetGroupARN:   &target,
+			})
+		}
+	}
+
+	return loadBalancers
+}
+
+func expandAdditionalUserData(data []interface{}) []kopsapi.UserData {
+	var userData []kopsapi.UserData
+
+	for _, d := range data {
+		if d != nil {
+			ud := d.(map[string]interface{})
+			userData = append(userData, kopsapi.UserData{
+				Name:    ud["name"].(string),
+				Type:    ud["type"].(string),
+				Content: ud["content"].(string),
+			})
+		}
+	}
+
+	return userData
 }
 
 func expandInstanceGroupRole(s string) kopsapi.InstanceGroupRole {

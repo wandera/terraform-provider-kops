@@ -222,5 +222,52 @@ func flattenInstanceGroupSpec(ig kopsapi.InstanceGroupSpec) []map[string]interfa
 	}
 	data["cloud_labels"] = ig.CloudLabels
 	data["node_labels"] = ig.NodeLabels
+	data["additional_security_groups"] = ig.AdditionalSecurityGroups
+	data["additional_user_data"] = flattenAdditionalUserData(ig.AdditionalUserData)
+	if ig.AssociatePublicIP != nil {
+		data["associate_public_ip"] = *ig.AssociatePublicIP
+	}
+	if ig.DetailedInstanceMonitoring != nil {
+		data["detailed_instance_monitoring"] = *ig.DetailedInstanceMonitoring
+	}
+	data["external_load_balancer"] = flattenExternalLoadBalancer(ig.ExternalLoadBalancers)
+	data["file_asset"] = flattenFileAsset(ig.FileAssets)
+	return []map[string]interface{}{data}
+}
+
+func flattenAdditionalUserData(ud []kopsapi.UserData) []map[string]interface{} {
+	data := make(map[string]interface{})
+
+	for _, userData := range ud {
+		data["name"] = userData.Name
+		data["type"] = userData.Type
+		data["content"] = userData.Content
+	}
+
+	return []map[string]interface{}{data}
+}
+
+func flattenExternalLoadBalancer(bl []kopsapi.LoadBalancer) []map[string]interface{} {
+	data := make(map[string]interface{})
+
+	for _, balancer := range bl {
+		data["load_balancer_name"] = *balancer.LoadBalancerName
+		data["target_group_arn"] = *balancer.TargetGroupARN
+	}
+
+	return []map[string]interface{}{data}
+}
+
+func flattenFileAsset(specs []kopsapi.FileAssetSpec) []map[string]interface{} {
+	data := make(map[string]interface{})
+
+	for _, fa := range specs {
+		data["name"] = fa.Name
+		data["path"] = fa.Path
+		data["content"] = fa.Content
+		data["is_base64"] = fa.IsBase64
+		data["roles"] = fa.Roles
+	}
+
 	return []map[string]interface{}{data}
 }
