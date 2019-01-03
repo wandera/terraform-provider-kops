@@ -251,6 +251,7 @@ func expandEtcdBackupSpec(data []interface{}) *kopsapi.EtcdBackupSpec {
 		backup := &kopsapi.EtcdBackupSpec{}
 		backup.BackupStore = d["backup_store"].(string)
 		backup.Image = d["image"].(string)
+		return backup
 	}
 	return nil
 }
@@ -345,33 +346,78 @@ func expandInstanceGroupSpec(data map[string]interface{}) kopsapi.InstanceGroupS
 	}
 	ig.ExternalLoadBalancers = expandExternalLoadBalancers(data["external_load_balancer"].([]interface{}))
 	ig.FileAssets = expandFileAssetSpec(data["file_asset"].([]interface{}))
-
+	ig.Hooks = expandHookSpec(data["hook"].([]interface{}))
 	return ig
+}
+
+func expandHookSpec(data []interface{}) []kopsapi.HookSpec {
+	var hooks []kopsapi.HookSpec
+
+	for _, d := range data {
+		if d != nil {
+			hook := d.(map[string]interface{})
+
+			rolesString := expandStringSlice(hook["roles"].([]interface{}))
+			roles := make([]kopsapi.InstanceGroupRole, len(rolesString))
+
+			for i, role := range rolesString {
+				roles[i] = expandInstanceGroupRole(role)
+			}
+
+			hooks = append(hooks, kopsapi.HookSpec{
+				Name:          hook["name"].(string),
+				Disabled:      hook["disabled"].(bool),
+				Manifest:      hook["manifest"].(string),
+				Before:        expandStringSlice(hook["before"].([]interface{})),
+				Requires:      expandStringSlice(hook["requires"].([]interface{})),
+				Roles:         roles,
+				ExecContainer: expandExecContainerAction(hook["exec_container"].([]interface{})),
+			})
+		}
+	}
+
+	return hooks
+}
+
+func expandExecContainerAction(data []interface{}) *kopsapi.ExecContainerAction {
+	if len(data) > 0 {
+		d := data[0].(map[string]interface{})
+		exec := &kopsapi.ExecContainerAction{
+			Image:       d["image"].(string),
+			Command:     expandStringSlice(d["command"].([]interface{})),
+			Environment: *expandStringMap(d["environment"].(map[string]interface{})),
+		}
+
+		return exec
+	}
+	return nil
 }
 
 func expandFileAssetSpec(data []interface{}) []kopsapi.FileAssetSpec {
 	var fileAssets []kopsapi.FileAssetSpec
 
 	for _, d := range data {
-		fas := d.(map[string]interface{})
-		name := fas["name"].(string)
-		path := fas["path"].(string)
-		content := fas["content"].(string)
-		isBase64 := fas["is_base64"].(bool)
-		rolesString := expandStringSlice(fas["roles"].([]interface{}))
-		roles := make([]kopsapi.InstanceGroupRole, len(rolesString))
+		if d != nil {
+			fas := d.(map[string]interface{})
+			name := fas["name"].(string)
+			path := fas["path"].(string)
+			content := fas["content"].(string)
+			isBase64 := fas["is_base64"].(bool)
+			rolesString := expandStringSlice(fas["roles"].([]interface{}))
+			roles := make([]kopsapi.InstanceGroupRole, len(rolesString))
 
-		for i, role := range rolesString {
-			roles[i] = expandInstanceGroupRole(role)
+			for i, role := range rolesString {
+				roles[i] = expandInstanceGroupRole(role)
+			}
+
+			fileAssets = append(fileAssets, kopsapi.FileAssetSpec{
+				Name:     name,
+				Path:     path,
+				Content:  content,
+				IsBase64: isBase64,
+				Roles:    roles,
+			})
 		}
-
-		fileAssets = append(fileAssets, kopsapi.FileAssetSpec{
-			Name:     name,
-			Path:     path,
-			Content:  content,
-			IsBase64: isBase64,
-			Roles:    roles,
-		})
 	}
 
 	return fileAssets

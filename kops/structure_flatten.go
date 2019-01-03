@@ -232,6 +232,41 @@ func flattenInstanceGroupSpec(ig kopsapi.InstanceGroupSpec) []map[string]interfa
 	}
 	data["external_load_balancer"] = flattenExternalLoadBalancer(ig.ExternalLoadBalancers)
 	data["file_asset"] = flattenFileAsset(ig.FileAssets)
+	data["hook"] = flattenHook(ig.Hooks)
+	return []map[string]interface{}{data}
+}
+
+func flattenHook(specs []kopsapi.HookSpec) []map[string]interface{} {
+	data := make(map[string]interface{})
+
+	for _, hook := range specs {
+		data["name"] = hook.Name
+		data["disabled"] = hook.Disabled
+		data["manifest"] = hook.Manifest
+		data["before"] = hook.Before
+		data["requires"] = hook.Requires
+
+		roles := make([]string, len(hook.Roles))
+		for i, role := range hook.Roles {
+			roles[i] = string(role)
+		}
+
+		data["roles"] = roles
+		data["exec_container"] = flattenExecContainerSpec(hook.ExecContainer)
+	}
+
+	return []map[string]interface{}{data}
+}
+
+func flattenExecContainerSpec(action *kopsapi.ExecContainerAction) interface{} {
+	data := make(map[string]interface{})
+
+	if action != nil {
+		data["image"] = action.Image
+		data["command"] = action.Command
+		data["environment"] = action.Environment
+	}
+
 	return []map[string]interface{}{data}
 }
 

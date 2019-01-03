@@ -30,6 +30,7 @@ func schemaInstanceGroupSpec() *schema.Schema {
 				"detailed_instance_monitoring": schemaBoolOptional(),
 				"external_load_balancer":       schemaLoadBalancer(),
 				"file_asset":                   schemaFileAsset(),
+				"hook":                         schemaHook(),
 			},
 		},
 	}
@@ -76,6 +77,40 @@ func schemaFileAsset() *schema.Schema {
 				"content":   schemaStringRequired(),
 				"is_base64": schemaBoolOptional(),
 				"roles":     schemaStringSliceRequired(),
+			},
+		},
+	}
+}
+
+func schemaHook() *schema.Schema {
+	return &schema.Schema{
+		Type:     schema.TypeList,
+		Optional: true,
+		Computed: true,
+		Elem: &schema.Resource{
+			Schema: map[string]*schema.Schema{
+				"name":           schemaStringRequired(),
+				"disabled":       schemaBoolOptional(),
+				"manifest":       schemaStringRequired(),
+				"before":         schemaStringSliceOptional(),
+				"requires":       schemaStringSliceOptional(),
+				"roles":          schemaStringSliceRequired(),
+				"exec_container": schemaExecContainer(),
+			},
+		},
+	}
+}
+
+func schemaExecContainer() *schema.Schema {
+	return &schema.Schema{
+		Type:     schema.TypeList,
+		Optional: true,
+		Computed: true,
+		Elem: &schema.Resource{
+			Schema: map[string]*schema.Schema{
+				"image":       schemaStringRequired(),
+				"command":     schemaStringSliceRequired(),
+				"environment": schemaStringMap(),
 			},
 		},
 	}
