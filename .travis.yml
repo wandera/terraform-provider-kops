@@ -25,7 +25,7 @@ env:
 install:
   - go get -u golang.org/x/lint/golint
   - go mod vendor
-  - cp TRAVIS_BUILD_DIR/hack/bindata.go $TRAVIS_BUILD_DIR/vendor/k8s.io/kops/upup/models/bindata.go
+  - cp hack/bindata.go vendor/k8s.io/kops/upup/models/bindata.go
 
 script:
   - go test -mod vendor -v ./...
