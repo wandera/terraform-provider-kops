@@ -24,10 +24,12 @@ env:
 
 install:
   - go get -u golang.org/x/lint/golint
+  - go mod vendor
+  - cp hack/bindata.go vendor/k8s.io/kops/upup/models/
 
 script:
-  - go test -v ./...
-  - go vet -v ./...
+  - go test -mod vendor -v ./...
+  - go vet -mod vendor -v ./...
   - golint -set_exit_status $(go list ./...)
   - |
     if [ -n "$(gofmt -s -l $(find . -type f -name '*.go'))" ]; then
@@ -46,9 +48,9 @@ before_deploy:
       GOOS=${PLATFORM%/*}
       GOARCH=${PLATFORM#*/}
       if [ "$GOOS" = "windows" ]; then
-        build_cmd="GOOS=$GOOS GOARCH=$GOARCH go build -o terraform-provider-kops -ldflags '-w -s'"
+        build_cmd="GOOS=$GOOS GOARCH=$GOARCH go build -mod vendor -o terraform-provider-kops -ldflags '-w -s'"
       else
-        build_cmd="CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o terraform-provider-kops -ldflags '-w -s'"
+        build_cmd="CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -mod vendor -o terraform-provider-kops -ldflags '-w -s'"
       fi
       if ! eval $build_cmd; then
         echo "Failed building sample for $PLATFORM" && return 1
