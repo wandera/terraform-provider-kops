@@ -8,4 +8,5 @@ hs_err_pid*
 *.iml
 virt
 dist
+vendor
 terraform-provider-kops
