@@ -11,7 +11,7 @@
 - [ ] Implement kops/v1alpha2/InstanceGroup flattening to TF state
 - [x] Implement kops_instance_group resource state sync
 - [ ] Cover flattening/expanding of state by UTs
-- [ ] Fill in spec defaults using `cloudup` package
+- [x] Fill in spec defaults using `cloudup` package
 - [ ] Deep validate spec using `cloudup` package
 - [ ] Run create cluster cmd
 

@@ -45,6 +45,14 @@ func schemaStringRequired() *schema.Schema {
 	}
 }
 
+func schemaStringOptionalComputed() *schema.Schema {
+	return &schema.Schema{
+		Type:     schema.TypeString,
+		Optional: true,
+		Computed: true,
+	}
+}
+
 func schemaStringComputed() *schema.Schema {
 	return &schema.Schema{
 		Type:     schema.TypeString,

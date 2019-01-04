@@ -12,8 +12,8 @@ func schemaInstanceGroupSpec() *schema.Schema {
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"role":                         schemaStringInSliceRequired([]string{"Master", "Node", "Bastion"}),
-				"machine_type":                 schemaStringOptional(),
-				"image":                        schemaStringOptional(),
+				"machine_type":                 schemaStringOptionalComputed(),
+				"image":                        schemaStringOptionalComputed(),
 				"min_size":                     schemaIntOptional(),
 				"max_size":                     schemaIntOptional(),
 				"root_volume_size":             schemaIntOptional(),

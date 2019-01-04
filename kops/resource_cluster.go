@@ -4,6 +4,8 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/kops/pkg/apis/kops"
+	"k8s.io/kops/pkg/assets"
+	"k8s.io/kops/upup/pkg/fi/cloudup"
 )
 
 func resourceCluster() *schema.Resource {
@@ -30,6 +32,22 @@ func resourceClusterCreate(d *schema.ResourceData, m interface{}) error {
 		ObjectMeta: expandObjectMeta(sectionData(d, "metadata")),
 		Spec:       expandClusterSpec(sectionData(d, "spec")),
 	})
+	if err != nil {
+		return err
+	}
+
+	cluster, err = clientset.GetCluster(cluster.Name)
+	if err != nil {
+		return err
+	}
+
+	assetBuilder := assets.NewAssetBuilder(cluster, "")
+	fullCluster, err := cloudup.PopulateClusterSpec(clientset, cluster, assetBuilder)
+	if err != nil {
+		return err
+	}
+
+	_, err = clientset.UpdateCluster(fullCluster, nil)
 	if err != nil {
 		return err
 	}

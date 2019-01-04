@@ -6,6 +6,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
+	"k8s.io/kops/upup/pkg/fi/cloudup"
 	"strings"
 )
 
@@ -59,6 +60,16 @@ func resourceInstanceGroupCreate(d *schema.ResourceData, m interface{}) error {
 		ObjectMeta: expandObjectMeta(sectionData(d, "metadata")),
 		Spec:       expandInstanceGroupSpec(sectionData(d, "spec")),
 	})
+	if err != nil {
+		return err
+	}
+
+	fullInstanceGroup, err := cloudup.PopulateInstanceGroupSpec(cluster, instanceGroup, nil)
+	if err != nil {
+		return err
+	}
+
+	_, err = clientset.InstanceGroupsFor(cluster).Update(fullInstanceGroup)
 	if err != nil {
 		return err
 	}
