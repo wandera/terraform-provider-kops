@@ -23,14 +23,13 @@ env:
   - GO111MODULE=on
 
 install:
-  - go get github.com/alecthomas/gometalinter
-  - gometalinter --install --vendored-linters
+  - curl -L https://git.io/vp6lP | sh
   - go mod vendor
   - cp hack/bindata.go vendor/k8s.io/kops/upup/models/bindata.go
 
 script:
   - go test -mod vendor -v ./...
-  - gometalinter
+  - ./bin/gometalinter
 
 before_deploy:
   - PLATFORMS=(darwin/amd64 freebsd/amd64 linux/amd64 windows/amd64)
