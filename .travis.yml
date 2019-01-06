@@ -23,8 +23,8 @@ env:
   - GO111MODULE=on
 
 install:
-  - go get github.com/alecthomas/gometalinter
-  - gometalinter --install --vendored-linters
+  - curl -L https://git.io/vp6lP | sh
+  - export PATH=$TRAVIS_BUILD_DIR/bin:$PATH
   - go mod vendor
   - cp hack/bindata.go vendor/k8s.io/kops/upup/models/bindata.go
 
