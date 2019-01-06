@@ -24,12 +24,13 @@ env:
 
 install:
   - curl -L https://git.io/vp6lP | sh
+  - export PATH=$TRAVIS_BUILD_DIR/bin:$PATH
   - go mod vendor
   - cp hack/bindata.go vendor/k8s.io/kops/upup/models/bindata.go
 
 script:
   - go test -mod vendor -v ./...
-  - ./bin/gometalinter
+  - gometalinter
 
 before_deploy:
   - PLATFORMS=(darwin/amd64 freebsd/amd64 linux/amd64 windows/amd64)
