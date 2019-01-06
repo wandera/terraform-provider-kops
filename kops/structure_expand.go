@@ -3,6 +3,7 @@ package kops
 import (
 	"encoding/json"
 	"log"
+	"strings"
 	"time"
 
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -23,56 +24,210 @@ func expandObjectMeta(data map[string]interface{}) v1.ObjectMeta {
 
 func expandClusterSpec(data map[string]interface{}) kopsapi.ClusterSpec {
 	clusterspec := kopsapi.ClusterSpec{}
+	if top, ok := data["additional_policies"]; ok {
+		ap := expandStringMap(top)
+		clusterspec.AdditionalPolicies = &ap
+	}
 	clusterspec.Channel = data["channel"].(string)
 	clusterspec.CloudProvider = data["cloud_provider"].(string)
 	clusterspec.ClusterDNSDomain = data["cluster_dnsdomain"].(string)
 	clusterspec.ConfigBase = data["config_base"].(string)
 	clusterspec.ConfigStore = data["config_store"].(string)
 	clusterspec.DNSZone = data["dnszone"].(string)
+	if top, ok := data["etcd_cluster"]; ok {
+		clusterspec.EtcdClusters = expandEtcdClusterSpec(top.([]interface{}))
+	}
 	clusterspec.KeyStore = data["key_store"].(string)
+	if top, ok := data["kube_api_server"]; ok {
+		clusterspec.KubeAPIServer = expandKubeApiServer(top.([]interface{}))
+	}
+	if top, ok := data["kube_dns"]; ok {
+		clusterspec.KubeDNS = expandKubeDNS(top.([]interface{}))
+	}
+	if top, ok := data["kube_proxy"]; ok {
+		clusterspec.KubeProxy = expandKubeProxy(top.([]interface{}))
+	}
+	if top, ok := data["kube_scheduler"]; ok {
+		clusterspec.KubeScheduler = expandKubeScheduler(top.([]interface{}))
+	}
+	if top, ok := data["kubernetes_api_access"]; ok {
+		clusterspec.KubernetesAPIAccess = expandStringSlice(top)
+	}
 	clusterspec.KubernetesVersion = data["kubernetes_version"].(string)
 	clusterspec.MasterInternalName = data["master_internal_name"].(string)
 	clusterspec.MasterPublicName = data["master_public_name"].(string)
 	clusterspec.NetworkCIDR = data["network_cidr"].(string)
 	clusterspec.NetworkID = data["network_id"].(string)
-	clusterspec.NonMasqueradeCIDR = data["non_masquerade_cidr"].(string)
-	clusterspec.Project = data["project"].(string)
-	clusterspec.SecretStore = data["secret_store"].(string)
-	clusterspec.ServiceClusterIPRange = data["service_cluster_iprange"].(string)
-	clusterspec.SSHKeyName = data["sshkey_name"].(string)
-
-	if top, ok := data["kubernetes_api_access"]; ok {
-		clusterspec.KubernetesAPIAccess = expandStringSlice(top)
-	}
-	if top, ok := data["ssh_access"]; ok {
-		clusterspec.SSHAccess = expandStringSlice(top)
-	}
-
-	if top, ok := data["subnet"]; ok {
-		clusterspec.Subnets = expandClusterSubnetSpec(top.([]interface{}))
-	}
-
 	if top, ok := data["networking"]; ok {
 		clusterspec.Networking = expandNetworkingSpec(top.([]interface{}))
 	}
-
-	if top, ok := data["etcd_cluster"]; ok {
-		clusterspec.EtcdClusters = expandEtcdClusterSpec(top.([]interface{}))
+	clusterspec.NonMasqueradeCIDR = data["non_masquerade_cidr"].(string)
+	clusterspec.Project = data["project"].(string)
+	clusterspec.SecretStore = data["secret_store"].(string)
+	if top, ok := data["ssh_access"]; ok {
+		clusterspec.SSHAccess = expandStringSlice(top)
 	}
-
+	if top, ok := data["subnet"]; ok {
+		clusterspec.Subnets = expandClusterSubnetSpec(top.([]interface{}))
+	}
+	clusterspec.ServiceClusterIPRange = data["service_cluster_iprange"].(string)
+	clusterspec.SSHKeyName = data["sshkey_name"].(string)
 	if top, ok := data["topology"]; ok {
 		clusterspec.Topology = expandClusterTopology(top.([]interface{}))
-	}
-
-	if top, ok := data["additional_policies"]; ok {
-		ap := expandStringMap(top)
-		clusterspec.AdditionalPolicies = &ap
 	}
 
 	spec, _ := json.Marshal(clusterspec)
 	log.Printf("[DEBUG] Spec: %s", string(spec))
 
 	return clusterspec
+}
+
+func expandKubeScheduler(data []interface{}) *kopsapi.KubeSchedulerConfig {
+	if len(data) > 0 {
+		conv := data[0].(map[string]interface{})
+		return &kopsapi.KubeSchedulerConfig{
+			FeatureGates:       expandStringMap(conv["feature_gates"]),
+			Image:              conv["image"].(string),
+			LeaderElection:     expandLeaderElection(conv["leader_election"].([]interface{})),
+			LogLevel:           int32(conv["log_level"].(int)),
+			Master:             conv["master"].(string),
+			UsePolicyConfigMap: expandBool(conv["use_policy_config_map"]),
+		}
+	}
+	return nil
+}
+
+func expandLeaderElection(data []interface{}) *kopsapi.LeaderElectionConfiguration {
+	if len(data) > 0 {
+		conv := data[0].(map[string]interface{})
+		return &kopsapi.LeaderElectionConfiguration{
+			LeaderElect: expandBool(conv["leader_elect"]),
+		}
+	}
+	return nil
+}
+
+func expandKubeProxy(data []interface{}) *kopsapi.KubeProxyConfig {
+	if len(data) > 0 {
+		conv := data[0].(map[string]interface{})
+		return &kopsapi.KubeProxyConfig{
+			BindAddress:         conv["bind_address"].(string),
+			ConntrackMaxPerCore: expandInt32(conv["conntrack_max_per_core"]),
+			ConntrackMin:        expandInt32(conv["conntrack_min"]),
+			ClusterCIDR:         conv["cluster_cidr"].(string),
+			CPULimit:            conv["cpu_limit"].(string),
+			CPURequest:          conv["cpu_request"].(string),
+			Enabled:             expandBool(conv["enabled"]),
+			FeatureGates:        expandStringMap(conv["feature_gates"]),
+			HostnameOverride:    conv["hostname_override"].(string),
+			Image:               conv["image"].(string),
+			LogLevel:            int32(conv["log_level"].(int)),
+			Master:              conv["master"].(string),
+			MemoryLimit:         conv["memory_limit"].(string),
+			MemoryRequest:       conv["memory_request"].(string),
+			ProxyMode:           conv["proxy_mode"].(string),
+		}
+	}
+	return nil
+}
+
+func expandKubeDNS(data []interface{}) *kopsapi.KubeDNSConfig {
+	if len(data) > 0 {
+		conv := data[0].(map[string]interface{})
+		return &kopsapi.KubeDNSConfig{
+			CacheMaxConcurrent:  conv["cache_max_concurrent"].(int),
+			CacheMaxSize:        conv["cache_max_size"].(int),
+			Domain:              conv["domain"].(string),
+			Image:               conv["image"].(string),
+			Provider:            conv["provider"].(string),
+			Replicas:            conv["replicas"].(int),
+			ServerIP:            conv["server_ip"].(string),
+			StubDomains:         expandStringStringSliceMap(conv["stub_domains"]),
+			UpstreamNameservers: expandStringSlice(conv["upstream_nameservers"]),
+		}
+	}
+	return nil
+}
+
+func expandKubeApiServer(data []interface{}) *kopsapi.KubeAPIServerConfig {
+	if len(data) > 0 {
+		conv := data[0].(map[string]interface{})
+		return &kopsapi.KubeAPIServerConfig{
+			Address:                              conv["address"].(string),
+			APIServerCount:                       expandInt32(conv["api_server_count"]),
+			AuditLogFormat:                       expandString(conv["audit_log_format"]),
+			AuditLogMaxAge:                       expandInt32(conv["audit_log_max_age"]),
+			AuditLogMaxBackups:                   expandInt32(conv["audit_log_max_backups"]),
+			AuditLogMaxSize:                      expandInt32(conv["audit_log_max_size"]),
+			AuditLogPath:                         expandString(conv["audit_log_path"]),
+			AuditPolicyFile:                      conv["audit_policy_file"].(string),
+			AuthenticationTokenWebhookCacheTTL:   expandDuration(conv["authentication_token_webhook_cache_ttl"]),
+			AuthenticationTokenWebhookConfigFile: expandString(conv["authentication_token_webhook_config_file"]),
+			AuthorizationMode:                    expandString(conv["authorization_mode"]),
+			AuthorizationRBACSuperUser:           expandString(conv["authorization_rbac_super_user"]),
+			AllowPrivileged:                      expandBool(conv["allow_privileged"]),
+			AnonymousAuth:                        expandBool(conv["anonymous_auth"]),
+			BasicAuthFile:                        conv["basic_auth_file"].(string),
+			BindAddress:                          conv["bind_address"].(string),
+			ClientCAFile:                         conv["client_ca_file"].(string),
+			CloudProvider:                        conv["cloud_provider"].(string),
+			DisableAdmissionPlugins:              expandStringSlice(conv["disable_admission_plugins"]),
+			EnableAdmissionPlugins:               expandStringSlice(conv["enable_admission_plugins"]),
+			EnableAggregatorRouting:              expandBool(conv["enable_aggregator_routing"]),
+			EnableBootstrapAuthToken:             expandBool(conv["enable_bootstrap_auth_token"]),
+			EtcdCAFile:                           conv["etcd_ca_file"].(string),
+			EtcdCertFile:                         conv["etcd_cert_file"].(string),
+			EtcdKeyFile:                          conv["etcd_key_file"].(string),
+			EtcdQuorumRead:                       expandBool(conv["etcd_quorum_read"]),
+			EtcdServers:                          expandStringSlice(conv["etcd_servers"]),
+			EtcdServersOverrides:                 expandStringSlice(conv["etcd_servers_overrides"]),
+			ExperimentalEncryptionProviderConfig: expandString(conv["experimental_encryption_provider_config"]),
+			FeatureGates:                         expandStringMap(conv["feature_gates"]),
+			InsecureBindAddress:                  conv["insecure_bind_address"].(string),
+			InsecurePort:                         int32(conv["insecure_port"].(int)),
+			Image:                                conv["image"].(string),
+			KubeletClientCertificate:             conv["kubelet_client_certificate"].(string),
+			KubeletClientKey:                     conv["kubelet_client_key"].(string),
+			KubeletPreferredAddressTypes:         expandStringSlice(conv["kubelet_preferred_address_types"]),
+			LogLevel:                             int32(conv["log_level"].(int)),
+			MaxRequestsInflight:                  int32(conv["max_requests_inflight"].(int)),
+			MinRequestTimeout:                    expandInt32(conv["mix_request_timeout"]),
+			OIDCCAFile:                           expandString(conv["oidc_ca_file"]),
+			OIDCClientID:                         expandString(conv["oidc_client_id"]),
+			OIDCGroupsClaim:                      expandString(conv["oidc_groups_claim"]),
+			OIDCGroupsPrefix:                     expandString(conv["oidc_groups_prefix"]),
+			OIDCIssuerURL:                        expandString(conv["oidc_issuer_url"]),
+			OIDCUsernameClaim:                    expandString(conv["oidc_username_claim"]),
+			OIDCUsernamePrefix:                   expandString(conv["oidc_username_prefix"]),
+			ProxyClientCertFile:                  expandString(conv["proxy_client_cert_file"]),
+			ProxyClientKeyFile:                   expandString(conv["proxy_client_key_file"]),
+			RequestheaderAllowedNames:            expandStringSlice(conv["requestheader_allowed_names"]),
+			RequestheaderClientCAFile:            conv["requestheader_client_ca_file"].(string),
+			RequestheaderExtraHeaderPrefixes:     expandStringSlice(conv["requestheader_extra_header_prefixes"]),
+			RequestheaderGroupHeaders:            expandStringSlice(conv["requestheader_group_headers"]),
+			RequestheaderUsernameHeaders:         expandStringSlice(conv["requestheader_username_headers"]),
+			RuntimeConfig:                        expandStringMap(conv["runtime_config"]),
+			SecurePort:                           int32(conv["secure_port"].(int)),
+			ServiceClusterIPRange:                conv["service_cluster_ip_range"].(string),
+			ServiceNodePortRange:                 conv["service_node_port_range"].(string),
+			StorageBackend:                       expandString(conv["storage_backend"]),
+			TLSCertFile:                          conv["tls_cert_file"].(string),
+			TLSPrivateKeyFile:                    conv["tls_private_key_file"].(string),
+			TokenAuthFile:                        conv["token_auth_file"].(string),
+		}
+	}
+	return nil
+}
+
+func expandStringStringSliceMap(data interface{}) map[string][]string {
+	ret := make(map[string][]string)
+	if data != nil {
+		d := data.(map[string]interface{})
+		for key, val := range d {
+			ret[key] = strings.Split(val.(string), ",")
+		}
+	}
+	return ret
 }
 
 func expandStringMap(data interface{}) map[string]string {

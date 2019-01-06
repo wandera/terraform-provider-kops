@@ -3,6 +3,7 @@ package kops
 import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	kopsapi "k8s.io/kops/pkg/apis/kops"
+	"strings"
 )
 
 func flattenObjectMeta(cluster v1.ObjectMeta) []map[string]interface{} {
@@ -24,6 +25,18 @@ func flattenClusterSpec(cluster kopsapi.ClusterSpec) []map[string]interface{} {
 	data["config_store"] = cluster.ConfigStore
 	data["dnszone"] = cluster.DNSZone
 	data["key_store"] = cluster.KeyStore
+	if cluster.KubeAPIServer != nil {
+		data["kube_api_server"] = flattenKubeApiServer(cluster.KubeAPIServer)
+	}
+	if cluster.KubeDNS != nil {
+		data["kube_dns"] = flattenKubeDNS(cluster.KubeDNS)
+	}
+	if cluster.KubeProxy != nil {
+		data["kube_proxy"] = flattenKubeProxy(cluster.KubeProxy)
+	}
+	if cluster.KubeScheduler != nil {
+		data["kube_scheduler"] = flattenKubeScheduler(cluster.KubeScheduler)
+	}
 	data["kubernetes_version"] = cluster.KubernetesVersion
 	data["master_internal_name"] = cluster.MasterInternalName
 	data["master_public_name"] = cluster.MasterPublicName
@@ -44,6 +57,197 @@ func flattenClusterSpec(cluster kopsapi.ClusterSpec) []map[string]interface{} {
 	data["additional_policies"] = *cluster.AdditionalPolicies
 	data["etcd_cluster"] = flattenEtcdClusterSpec(cluster.EtcdClusters)
 
+	return []map[string]interface{}{data}
+}
+
+func flattenKubeApiServer(api *kopsapi.KubeAPIServerConfig) []map[string]interface{} {
+	data := make(map[string]interface{})
+	data["address"] = api.Address
+	if api.APIServerCount != nil {
+		data["api_server_count"] = *api.APIServerCount
+	}
+	if api.AuditLogFormat != nil {
+		data["audit_log_format"] = *api.AuditLogFormat
+	}
+	if api.AuditLogMaxAge != nil {
+		data["audit_log_max_age"] = *api.AuditLogMaxAge
+	}
+	if api.AuditLogMaxBackups != nil {
+		data["audit_log_max_backups"] = *api.AuditLogMaxBackups
+	}
+	if api.AuditLogMaxSize != nil {
+		data["audit_log_max_size"] = *api.AuditLogMaxSize
+	}
+	if api.AuditLogPath != nil {
+		data["audit_log_path"] = *api.AuditLogPath
+	}
+	data["audit_policy_file"] = api.AuditPolicyFile
+	if api.AuthenticationTokenWebhookCacheTTL != nil {
+		data["authentication_token_webhook_cache_ttl"] = *api.AuthenticationTokenWebhookCacheTTL
+	}
+	if api.AuthenticationTokenWebhookConfigFile != nil {
+		data["authentication_token_webhook_config_file"] = *api.AuthenticationTokenWebhookConfigFile
+	}
+	if api.AuthorizationMode != nil {
+		data["authorization_mode"] = *api.AuthorizationMode
+	}
+	if api.AuthorizationRBACSuperUser != nil {
+		data["authorization_rbac_super_user"] = *api.AuthorizationRBACSuperUser
+	}
+	if api.AllowPrivileged != nil {
+		data["allow_privileged"] = *api.AllowPrivileged
+	}
+	if api.AnonymousAuth != nil {
+		data["anonymous_auth"] = *api.AnonymousAuth
+	}
+	data["basic_auth_file"] = api.BasicAuthFile
+	data["bind_address"] = api.BindAddress
+	data["client_ca_file"] = api.ClientCAFile
+	data["cloud_provider"] = api.CloudProvider
+	data["disable_admission_plugins"] = api.DisableAdmissionPlugins
+	data["enable_admission_plugins"] = api.EnableAdmissionPlugins
+	if api.EnableAggregatorRouting != nil {
+		data["enable_aggregator_routing"] = *api.EnableAggregatorRouting
+	}
+	if api.EnableBootstrapAuthToken != nil {
+		data["enable_bootstrap_auth_token"] = *api.EnableBootstrapAuthToken
+	}
+	data["etcd_ca_file"] = api.EtcdCAFile
+	data["etcd_cert_file"] = api.EtcdCertFile
+	data["etcd_key_file"] = api.EtcdKeyFile
+	if api.EtcdQuorumRead != nil {
+		data["etcd_quorum_read"] = *api.EtcdQuorumRead
+	}
+	data["etcd_servers"] = api.EtcdServers
+	data["etcd_servers_overrides"] = api.EtcdServersOverrides
+	if api.ExperimentalEncryptionProviderConfig != nil {
+		data["experimental_encryption_provider_config"] = *api.ExperimentalEncryptionProviderConfig
+	}
+	data["feature_gates"] = api.FeatureGates
+	data["insecure_bind_address"] = api.InsecureBindAddress
+	data["insecure_port"] = int(api.InsecurePort)
+	data["image"] = api.Image
+	data["kubelet_client_certificate"] = api.KubeletClientCertificate
+	data["kubelet_client_key"] = api.KubeletClientKey
+	data["kubelet_preferred_address_types"] = api.KubeletPreferredAddressTypes
+	data["log_level"] = int(api.LogLevel)
+	data["max_requests_inflight"] = int(api.MaxRequestsInflight)
+	if api.MinRequestTimeout != nil {
+		data["mix_request_timeout"] = int(*api.MinRequestTimeout)
+	}
+	if api.OIDCCAFile != nil {
+		data["oidc_ca_file"] = *api.OIDCCAFile
+	}
+	if api.OIDCClientID != nil {
+		data["oidc_client_id"] = *api.OIDCClientID
+	}
+	if api.OIDCGroupsClaim != nil {
+		data["oidc_groups_claim"] = *api.OIDCGroupsClaim
+	}
+	if api.OIDCGroupsPrefix != nil {
+		data["oidc_groups_prefix"] = *api.OIDCGroupsPrefix
+	}
+	if api.OIDCIssuerURL != nil {
+		data["oidc_issuer_url"] = *api.OIDCIssuerURL
+	}
+	if api.OIDCUsernameClaim != nil {
+		data["oidc_username_claim"] = *api.OIDCUsernameClaim
+	}
+	if api.OIDCUsernamePrefix != nil {
+		data["oidc_username_prefix"] = *api.OIDCUsernamePrefix
+	}
+	if api.ProxyClientCertFile != nil {
+		data["proxy_client_cert_file"] = *api.ProxyClientCertFile
+	}
+	if api.ProxyClientKeyFile != nil {
+		data["proxy_client_key_file"] = *api.ProxyClientKeyFile
+	}
+	data["requestheader_allowed_names"] = api.RequestheaderAllowedNames
+	data["requestheader_client_ca_file"] = api.RequestheaderClientCAFile
+	data["requestheader_extra_header_prefixes"] = api.RequestheaderExtraHeaderPrefixes
+	data["requestheader_group_headers"] = api.RequestheaderGroupHeaders
+	data["requestheader_username_headers"] = api.RequestheaderUsernameHeaders
+	data["runtime_config"] = api.RuntimeConfig
+	data["secure_port"] = int(api.SecurePort)
+	data["service_cluster_ip_range"] = api.ServiceClusterIPRange
+	data["service_node_port_range"] = api.ServiceNodePortRange
+	if api.StorageBackend != nil {
+		data["storage_backend"] = *api.StorageBackend
+	}
+	data["tls_cert_file"] = api.TLSCertFile
+	data["tls_private_key_file"] = api.TLSPrivateKeyFile
+	data["token_auth_file"] = api.TokenAuthFile
+	return []map[string]interface{}{data}
+}
+
+func flattenKubeDNS(dns *kopsapi.KubeDNSConfig) []map[string]interface{} {
+	data := make(map[string]interface{})
+	data["cache_max_concurrent"] = dns.CacheMaxConcurrent
+	data["cache_max_size"] = dns.CacheMaxSize
+	data["domain"] = dns.Domain
+	data["image"] = dns.Image
+	data["provider"] = dns.Provider
+	data["replicas"] = dns.Replicas
+	data["server_ip"] = dns.ServerIP
+	data["stub_domains"] = flattenStubDomains(dns.StubDomains)
+	data["upstream_nameservers"] = dns.UpstreamNameservers
+	return []map[string]interface{}{data}
+}
+
+func flattenStubDomains(domains map[string][]string) map[string]interface{} {
+	data := make(map[string]interface{})
+	for key, val := range domains {
+		data[key] = strings.Join(val, ",")
+	}
+	return data
+}
+
+func flattenKubeProxy(proxy *kopsapi.KubeProxyConfig) []map[string]interface{} {
+	data := make(map[string]interface{})
+	data["bind_address"] = proxy.BindAddress
+	if proxy.ConntrackMaxPerCore != nil {
+		data["conntrack_max_per_core"] = proxy.ConntrackMaxPerCore
+	}
+	if proxy.ConntrackMin != nil {
+		data["conntrack_min"] = proxy.ConntrackMin
+	}
+	data["cluster_cidr"] = proxy.ClusterCIDR
+	data["cpu_limit"] = proxy.CPULimit
+	data["cpu_request"] = proxy.CPURequest
+	if proxy.Enabled != nil {
+		data["enabled"] = proxy.Enabled
+	}
+	data["feature_gates"] = proxy.FeatureGates
+	data["hostname_override"] = proxy.HostnameOverride
+	data["image"] = proxy.Image
+	data["log_level"] = proxy.LogLevel
+	data["master"] = proxy.Master
+	data["memory_limit"] = proxy.MemoryLimit
+	data["memory_request"] = proxy.MemoryRequest
+	data["proxy_mode"] = proxy.ProxyMode
+	return []map[string]interface{}{data}
+}
+
+func flattenKubeScheduler(scheduler *kopsapi.KubeSchedulerConfig) []map[string]interface{} {
+	data := make(map[string]interface{})
+	data["feature_gates"] = scheduler.FeatureGates
+	data["image"] = scheduler.Image
+	if scheduler.LeaderElection != nil {
+		data["leader_election"] = flattenLeaderElection(scheduler.LeaderElection)
+	}
+	data["log_level"] = int(scheduler.LogLevel)
+	data["master"] = scheduler.Master
+	if scheduler.UsePolicyConfigMap != nil {
+		data["use_policy_config_map"] = *scheduler.UsePolicyConfigMap
+	}
+	return []map[string]interface{}{data}
+}
+
+func flattenLeaderElection(leader *kopsapi.LeaderElectionConfiguration) []map[string]interface{} {
+	data := make(map[string]interface{})
+	if leader.LeaderElect != nil {
+		data["leader_elect"] = *leader.LeaderElect
+	}
 	return []map[string]interface{}{data}
 }
 
