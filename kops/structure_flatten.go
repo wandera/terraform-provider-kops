@@ -233,6 +233,148 @@ func flattenInstanceGroupSpec(ig kopsapi.InstanceGroupSpec) []map[string]interfa
 	data["external_load_balancer"] = flattenExternalLoadBalancer(ig.ExternalLoadBalancers)
 	data["file_asset"] = flattenFileAsset(ig.FileAssets)
 	data["hook"] = flattenHook(ig.Hooks)
+	data["kubelet"] = flattenKubeletSpec(ig.Kubelet)
+	return []map[string]interface{}{data}
+}
+
+func flattenKubeletSpec(spec *kopsapi.KubeletConfigSpec) []map[string]interface{} {
+	data := make(map[string]interface{})
+
+	if spec != nil {
+		data["api_servers"] = spec.APIServers
+		data["authorization_mode"] = spec.AuthorizationMode
+		if spec.AllowPrivileged != nil {
+			data["allow_privileged"] = *spec.AllowPrivileged
+		}
+		if spec.AnonymousAuth != nil {
+			data["anonymous_auth"] = *spec.AnonymousAuth
+		}
+		if spec.AuthenticationTokenWebhook != nil {
+			data["authentication_token_webhook"] = *spec.AuthenticationTokenWebhook
+		}
+		if spec.AuthenticationTokenWebhookCacheTTL != nil {
+			data["authentication_token_webhook_cache_ttl"] = spec.AuthenticationTokenWebhookCacheTTL.Duration.String()
+		}
+		if spec.BabysitDaemons != nil {
+			data["babysit_daemons"] = *spec.BabysitDaemons
+		}
+		data["bootstrap_kubeconfig"] = spec.BootstrapKubeconfig
+		data["cgroup_root"] = spec.CgroupRoot
+		data["client_ca_file"] = spec.ClientCAFile
+		data["cloud_provider"] = spec.CloudProvider
+		data["cluster_dns"] = spec.ClusterDNS
+		data["cluster_domain"] = spec.ClusterDomain
+		if spec.ConfigureCBR0 != nil {
+			data["configure_cbr0"] = *spec.ConfigureCBR0
+		}
+		if spec.DockerDisableSharedPID != nil {
+			data["docker_disable_shared_pid"] = *spec.DockerDisableSharedPID
+		}
+		if spec.EnableCustomMetrics != nil {
+			data["enable_custom_metrics"] = *spec.EnableCustomMetrics
+		}
+		if spec.EnableDebuggingHandlers != nil {
+			data["enable_debugging_handlers"] = *spec.EnableDebuggingHandlers
+		}
+		data["enforce_node_allocatable"] = spec.EnforceNodeAllocatable
+		if spec.EvictionHard != nil {
+			data["eviction_hard"] = *spec.EvictionHard
+		}
+		data["eviction_max_pod_grace_period"] = spec.EvictionMaxPodGracePeriod
+		data["eviction_minimum_reclaim"] = spec.EvictionMinimumReclaim
+		if spec.EvictionPressureTransitionPeriod != nil {
+			data["eviction_pressure_transition_period"] = spec.EvictionPressureTransitionPeriod.Duration.String()
+		}
+
+		data["eviction_soft"] = spec.EvictionSoft
+		data["eviction_soft_grace_period"] = spec.EvictionSoftGracePeriod
+		data["experimental_allowed_unsafe_sysctls"] = spec.ExperimentalAllowedUnsafeSysctls
+		if spec.FailSwapOn != nil {
+			data["fail_swap_on"] = *spec.FailSwapOn
+		}
+
+		data["feature_gates"] = spec.FeatureGates
+		data["hairpin_mode"] = spec.HairpinMode
+		data["hostname_override"] = spec.HostnameOverride
+		if spec.ImageGCHighThresholdPercent != nil {
+			data["image_gc_high_threshold_percent"] = int(*spec.ImageGCHighThresholdPercent)
+		}
+		if spec.ImageGCLowThresholdPercent != nil {
+			data["image_gc_low_threshold_percent"] = int(*spec.ImageGCLowThresholdPercent)
+		}
+		if spec.ImagePullProgressDeadline != nil {
+			data["image_pull_progress_deadline"] = spec.ImagePullProgressDeadline.Duration.String()
+		}
+		data["kubeconfig_path"] = spec.KubeconfigPath
+		data["kubelet_cgroups"] = spec.KubeletCgroups
+		data["kube_reserved"] = spec.KubeReserved
+		data["kube_reserved_cgroup"] = spec.KubeReservedCgroup
+		if spec.LogLevel != nil {
+			data["log_level"] = int(*spec.LogLevel)
+		}
+		if spec.MaxPods != nil {
+			data["max_pods"] = int(*spec.MaxPods)
+		}
+		if spec.NetworkPluginMTU != nil {
+			data["network_plugin_mtu"] = int(*spec.NetworkPluginMTU)
+		}
+
+		data["network_plugin_name"] = spec.NetworkPluginName
+
+		data["node_labels"] = spec.NodeLabels
+		if spec.NodeStatusUpdateFrequency != nil {
+			data["node_status_update_frequency"] = spec.NodeStatusUpdateFrequency.Duration.String()
+		}
+		data["non_masquerade_cidr"] = spec.NonMasqueradeCIDR
+		data["nvidia_gpus"] = spec.NvidiaGPUs
+
+		data["pod_cidr"] = spec.PodCIDR
+		data["pod_infra_container_image"] = spec.PodInfraContainerImage
+		data["pod_manifest_path"] = spec.PodManifestPath
+		if spec.ReadOnlyPort != nil {
+			data["read_only_port"] = int(*spec.ReadOnlyPort)
+		}
+		if spec.ReconcileCIDR != nil {
+			data["reconcile_cidr"] = *spec.ReconcileCIDR
+		}
+		if spec.RegisterNode != nil {
+			data["register_node"] = *spec.RegisterNode
+		}
+		if spec.RegisterSchedulable != nil {
+			data["register_schedulable"] = *spec.RegisterSchedulable
+		}
+		if spec.RequireKubeconfig != nil {
+			data["require_kubeconfig"] = *spec.RequireKubeconfig
+		}
+		if spec.ResolverConfig != nil {
+			data["resolver_config"] = *spec.ResolverConfig
+		}
+		data["root_dir"] = spec.RootDir
+		if spec.RuntimeRequestTimeout != nil {
+			data["runtime_request_timeout"] = spec.RuntimeRequestTimeout.Duration.String()
+		}
+		data["runtime_cgroups"] = spec.RuntimeCgroups
+		if spec.SeccompProfileRoot != nil {
+			data["seccomp_profile_root"] = *spec.SeccompProfileRoot
+		}
+		if spec.SerializeImagePulls != nil {
+			data["serialize_image_pulls"] = *spec.SerializeImagePulls
+		}
+		if spec.StreamingConnectionIdleTimeout != nil {
+			data["streaming_connection_idle_timeout"] = spec.StreamingConnectionIdleTimeout.Duration.String()
+		}
+		data["system_cgroups"] = spec.SystemCgroups
+		data["system_reserved"] = spec.SystemReserved
+		data["system_reserved_cgroup"] = spec.SystemReservedCgroup
+		data["taints"] = spec.Taints
+		data["tls_cert_file"] = spec.TLSCertFile
+		data["tls_private_key_file"] = spec.TLSPrivateKeyFile
+		data["volume_plugin_directory"] = spec.VolumePluginDirectory
+		if spec.VolumeStatsAggPeriod != nil {
+			data["volume_stats_agg_period"] = spec.VolumeStatsAggPeriod.Duration.String()
+		}
+	}
+
 	return []map[string]interface{}{data}
 }
 

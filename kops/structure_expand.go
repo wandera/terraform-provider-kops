@@ -2,10 +2,11 @@ package kops
 
 import (
 	"encoding/json"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
-	kopsapi "k8s.io/kops/pkg/apis/kops"
 	"log"
 	"time"
+
+	"k8s.io/apimachinery/pkg/apis/meta/v1"
+	kopsapi "k8s.io/kops/pkg/apis/kops"
 )
 
 func expandObjectMeta(data map[string]interface{}) v1.ObjectMeta {
@@ -41,10 +42,10 @@ func expandClusterSpec(data map[string]interface{}) kopsapi.ClusterSpec {
 	clusterspec.SSHKeyName = data["sshkey_name"].(string)
 
 	if top, ok := data["kubernetes_api_access"]; ok {
-		clusterspec.KubernetesAPIAccess = expandStringSlice(top.([]interface{}))
+		clusterspec.KubernetesAPIAccess = expandStringSlice(top)
 	}
 	if top, ok := data["ssh_access"]; ok {
-		clusterspec.SSHAccess = expandStringSlice(top.([]interface{}))
+		clusterspec.SSHAccess = expandStringSlice(top)
 	}
 
 	if top, ok := data["subnet"]; ok {
@@ -64,7 +65,8 @@ func expandClusterSpec(data map[string]interface{}) kopsapi.ClusterSpec {
 	}
 
 	if top, ok := data["additional_policies"]; ok {
-		clusterspec.AdditionalPolicies = expandStringMap(top.(map[string]interface{}))
+		ap := expandStringMap(top)
+		clusterspec.AdditionalPolicies = &ap
 	}
 
 	spec, _ := json.Marshal(clusterspec)
@@ -73,20 +75,26 @@ func expandClusterSpec(data map[string]interface{}) kopsapi.ClusterSpec {
 	return clusterspec
 }
 
-func expandStringMap(data map[string]interface{}) *map[string]string {
-	s := make(map[string]string, len(data))
-	for key, val := range data {
-		s[key] = val.(string)
+func expandStringMap(data interface{}) map[string]string {
+	ret := make(map[string]string)
+	if data != nil {
+		d := data.(map[string]interface{})
+		for key, val := range d {
+			ret[key] = val.(string)
+		}
 	}
-	return &s
+	return ret
 }
 
-func expandStringSlice(data []interface{}) []string {
-	s := make([]string, len(data))
-	for i, val := range data {
-		s[i] = val.(string)
+func expandStringSlice(data interface{}) []string {
+	var ret []string
+	if data != nil {
+		d := data.([]interface{})
+		for _, val := range d {
+			ret = append(ret, val.(string))
+		}
 	}
-	return s
+	return ret
 }
 
 func expandClusterTopology(data []interface{}) *kopsapi.TopologySpec {
@@ -301,8 +309,8 @@ func expandInstanceGroupSpec(data map[string]interface{}) kopsapi.InstanceGroupS
 	ig.Role = expandInstanceGroupRole(data["role"].(string))
 	ig.MachineType = data["machine_type"].(string)
 	ig.Image = data["image"].(string)
-	ig.Subnets = expandStringSlice(data["subnets"].([]interface{}))
-	ig.Zones = expandStringSlice(data["zones"].([]interface{}))
+	ig.Subnets = expandStringSlice(data["subnets"])
+	ig.Zones = expandStringSlice(data["zones"])
 	if rvs, ok := data["root_volume_size"]; ok {
 		volumeSize := int32(rvs.(int))
 		ig.RootVolumeSize = &volumeSize
@@ -328,26 +336,130 @@ func expandInstanceGroupSpec(data map[string]interface{}) kopsapi.InstanceGroupS
 		ig.MaxSize = &maxSize
 	}
 	if cl, ok := data["cloud_labels"]; ok {
-		ig.CloudLabels = *expandStringMap(cl.(map[string]interface{}))
+		ig.CloudLabels = expandStringMap(cl)
 	}
 	if nl, ok := data["node_labels"]; ok {
-		ig.NodeLabels = *expandStringMap(nl.(map[string]interface{}))
+		ig.NodeLabels = expandStringMap(nl)
 	}
 
-	ig.AdditionalSecurityGroups = expandStringSlice(data["additional_security_groups"].([]interface{}))
+	ig.AdditionalSecurityGroups = expandStringSlice(data["additional_security_groups"])
 	ig.AdditionalUserData = expandAdditionalUserData(data["additional_user_data"].([]interface{}))
-	if api, ok := data["associate_public_ip"]; ok {
-		associate := api.(bool)
-		ig.AssociatePublicIP = &associate
-	}
-	if dim, ok := data["detailed_instance_monitoring"]; ok {
-		detailed := dim.(bool)
-		ig.DetailedInstanceMonitoring = &detailed
-	}
+	ig.AssociatePublicIP = expandBool(data["associate_public_ip"])
+	ig.DetailedInstanceMonitoring = expandBool(data["detailed_instance_monitoring"])
 	ig.ExternalLoadBalancers = expandExternalLoadBalancers(data["external_load_balancer"].([]interface{}))
 	ig.FileAssets = expandFileAssetSpec(data["file_asset"].([]interface{}))
 	ig.Hooks = expandHookSpec(data["hook"].([]interface{}))
+	ig.Kubelet = expandKubeletConfigSpec(data["kubelet"].([]interface{}))
 	return ig
+}
+
+func expandKubeletConfigSpec(data []interface{}) *kopsapi.KubeletConfigSpec {
+	if len(data) > 0 {
+		d := data[0].(map[string]interface{})
+
+		return &kopsapi.KubeletConfigSpec{
+			APIServers:                         d["api_servers"].(string),
+			AuthorizationMode:                  d["authorization_mode"].(string),
+			AllowPrivileged:                    expandBool(d["allow_privileged"]),
+			AnonymousAuth:                      expandBool(d["anonymous_auth"]),
+			AuthenticationTokenWebhook:         expandBool(d["authentication_token_webhook"]),
+			AuthenticationTokenWebhookCacheTTL: expandDuration(d["authentication_token_webhook_cache_ttl"]),
+			BabysitDaemons:                     expandBool(d["babysit_daemons"]),
+			BootstrapKubeconfig:                d["bootstrap_kubeconfig"].(string),
+			CgroupRoot:                         d["cgroup_root"].(string),
+			ClientCAFile:                       d["client_ca_file"].(string),
+			CloudProvider:                      d["cloud_provider"].(string),
+			ClusterDNS:                         d["cluster_dns"].(string),
+			ClusterDomain:                      d["cluster_domain"].(string),
+			ConfigureCBR0:                      expandBool(d["configure_cbr0"]),
+			DockerDisableSharedPID:             expandBool(d["docker_disable_shared_pid"]),
+			EnableCustomMetrics:                expandBool(d["enable_custom_metrics"]),
+			EnableDebuggingHandlers:            expandBool(d["enable_debugging_handlers"]),
+			EnforceNodeAllocatable:             d["enforce_node_allocatable"].(string),
+			EvictionHard:                       expandString(d["eviction_hard"]),
+			EvictionMaxPodGracePeriod:          int32(d["eviction_max_pod_grace_period"].(int)),
+			EvictionMinimumReclaim:             d["eviction_minimum_reclaim"].(string),
+			EvictionPressureTransitionPeriod:   expandDuration(d["eviction_pressure_transition_period"]),
+			EvictionSoft:                       d["eviction_soft"].(string),
+			EvictionSoftGracePeriod:            d["eviction_soft_grace_period"].(string),
+			ExperimentalAllowedUnsafeSysctls:   expandStringSlice(d["experimental_allowed_unsafe_sysctls"]),
+			FailSwapOn:                         expandBool(d["fail_swap_on"]),
+			FeatureGates:                       expandStringMap(d["feature_gates"]),
+			HairpinMode:                        d["hairpin_mode"].(string),
+			HostnameOverride:                   d["hostname_override"].(string),
+			ImageGCHighThresholdPercent:        expandInt32(d["image_gc_high_threshold_percent"]),
+			ImageGCLowThresholdPercent:         expandInt32(d["image_gc_low_threshold_percent"]),
+			ImagePullProgressDeadline:          expandDuration(d["image_pull_progress_deadline"]),
+			KubeconfigPath:                     d["kubeconfig_path"].(string),
+			KubeletCgroups:                     d["kubelet_cgroups"].(string),
+			KubeReserved:                       expandStringMap(d["kube_reserved"]),
+			KubeReservedCgroup:                 d["kube_reserved_cgroup"].(string),
+			LogLevel:                           expandInt32(d["log_level"]),
+			MaxPods:                            expandInt32(d["max_pods"]),
+			NetworkPluginMTU:                   expandInt32(d["network_plugin_mtu"]),
+			NetworkPluginName:                  d["network_plugin_name"].(string),
+			NodeLabels:                         expandStringMap(d["node_labels"]),
+			NodeStatusUpdateFrequency:          expandDuration(d["node_status_update_frequency"]),
+			NonMasqueradeCIDR:                  d["non_masquerade_cidr"].(string),
+			NvidiaGPUs:                         *expandInt32(d["nvidia_gpus"]),
+			PodCIDR:                            d["pod_cidr"].(string),
+			PodInfraContainerImage:             d["pod_infra_container_image"].(string),
+			PodManifestPath:                    d["pod_manifest_path"].(string),
+			ReadOnlyPort:                       expandInt32(d["read_only_port"]),
+			ReconcileCIDR:                      expandBool(d["reconcile_cidr"]),
+			RegisterNode:                       expandBool(d["register_node"]),
+			RegisterSchedulable:                expandBool(d["register_schedulable"]),
+			RequireKubeconfig:                  expandBool(d["require_kubeconfig"]),
+			ResolverConfig:                     expandString(d["resolver_config"]),
+			RootDir:                            d["root_dir"].(string),
+			RuntimeRequestTimeout:              expandDuration(d["runtime_request_timeout"]),
+			RuntimeCgroups:                     d["runtime_cgroups"].(string),
+			SeccompProfileRoot:                 expandString(d["seccomp_profile_root"]),
+			SerializeImagePulls:                expandBool(d["serialize_image_pulls"]),
+			StreamingConnectionIdleTimeout:     expandDuration(d["streaming_connection_idle_timeout"]),
+			SystemCgroups:                      d["system_cgroups"].(string),
+			SystemReserved:                     expandStringMap(d["system_reserved"]),
+			SystemReservedCgroup:               d["system_reserved_cgroup"].(string),
+			Taints:                             expandStringSlice(d["taints"]),
+			TLSCertFile:                        d["tls_cert_file"].(string),
+			TLSPrivateKeyFile:                  d["tls_private_key_file"].(string),
+			VolumePluginDirectory:              d["volume_plugin_directory"].(string),
+			VolumeStatsAggPeriod:               expandDuration(d["volume_stats_agg_period"]),
+		}
+	}
+	return nil
+}
+
+func expandInt32(data interface{}) *int32 {
+	if data != nil {
+		parsed := int32(data.(int))
+		return &parsed
+	}
+	return nil
+}
+
+func expandString(data interface{}) *string {
+	if data != nil {
+		parsed := data.(string)
+		return &parsed
+	}
+	return nil
+}
+
+func expandBool(data interface{}) *bool {
+	if data != nil {
+		parsed := data.(bool)
+		return &parsed
+	}
+	return nil
+}
+
+func expandDuration(data interface{}) *v1.Duration {
+	if data != nil {
+		parsed, _ := time.ParseDuration(data.(string))
+		return &v1.Duration{Duration: parsed}
+	}
+	return nil
 }
 
 func expandHookSpec(data []interface{}) []kopsapi.HookSpec {
@@ -357,7 +469,7 @@ func expandHookSpec(data []interface{}) []kopsapi.HookSpec {
 		if d != nil {
 			hook := d.(map[string]interface{})
 
-			rolesString := expandStringSlice(hook["roles"].([]interface{}))
+			rolesString := expandStringSlice(hook["roles"])
 			roles := make([]kopsapi.InstanceGroupRole, len(rolesString))
 
 			for i, role := range rolesString {
@@ -368,8 +480,8 @@ func expandHookSpec(data []interface{}) []kopsapi.HookSpec {
 				Name:          hook["name"].(string),
 				Disabled:      hook["disabled"].(bool),
 				Manifest:      hook["manifest"].(string),
-				Before:        expandStringSlice(hook["before"].([]interface{})),
-				Requires:      expandStringSlice(hook["requires"].([]interface{})),
+				Before:        expandStringSlice(hook["before"]),
+				Requires:      expandStringSlice(hook["requires"]),
 				Roles:         roles,
 				ExecContainer: expandExecContainerAction(hook["exec_container"].([]interface{})),
 			})
@@ -384,8 +496,8 @@ func expandExecContainerAction(data []interface{}) *kopsapi.ExecContainerAction 
 		d := data[0].(map[string]interface{})
 		exec := &kopsapi.ExecContainerAction{
 			Image:       d["image"].(string),
-			Command:     expandStringSlice(d["command"].([]interface{})),
-			Environment: *expandStringMap(d["environment"].(map[string]interface{})),
+			Command:     expandStringSlice(d["command"]),
+			Environment: expandStringMap(d["environment"]),
 		}
 
 		return exec
@@ -403,7 +515,7 @@ func expandFileAssetSpec(data []interface{}) []kopsapi.FileAssetSpec {
 			path := fas["path"].(string)
 			content := fas["content"].(string)
 			isBase64 := fas["is_base64"].(bool)
-			rolesString := expandStringSlice(fas["roles"].([]interface{}))
+			rolesString := expandStringSlice(fas["roles"])
 			roles := make([]kopsapi.InstanceGroupRole, len(rolesString))
 
 			for i, role := range rolesString {

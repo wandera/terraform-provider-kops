@@ -2,12 +2,13 @@ package kops
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/hashicorp/terraform/helper/schema"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/upup/pkg/fi/cloudup"
-	"strings"
 )
 
 type instanceGroupID struct {
@@ -64,7 +65,12 @@ func resourceInstanceGroupCreate(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	fullInstanceGroup, err := cloudup.PopulateInstanceGroupSpec(cluster, instanceGroup, nil)
+	channel, err := cloudup.ChannelForCluster(cluster)
+	if err != nil {
+		return err
+	}
+
+	fullInstanceGroup, err := cloudup.PopulateInstanceGroupSpec(cluster, instanceGroup, channel)
 	if err != nil {
 		return err
 	}
