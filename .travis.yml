@@ -23,20 +23,13 @@ env:
   - GO111MODULE=on
 
 install:
-  - go get -u golang.org/x/lint/golint
+  - curl -L https://git.io/vp6lP | sh
   - go mod vendor
   - cp hack/bindata.go vendor/k8s.io/kops/upup/models/bindata.go
 
 script:
   - go test -mod vendor -v ./...
-  - go vet -mod vendor -v ./...
-  - golint -set_exit_status $(go list ./...)
-  - |
-    if [ -n "$(gofmt -s -l $(find . -type f -name '*.go'))" ]; then
-        echo "Go code is not formatted:"
-        gofmt -s -d -e $(find . -type f -name '*.go')
-        exit 1
-    fi
+  - gometalinter
 
 before_deploy:
   - PLATFORMS=(darwin/amd64 freebsd/amd64 linux/amd64 windows/amd64)

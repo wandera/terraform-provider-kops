@@ -1,0 +1,22 @@
+{
+  "Vendor": true,
+  "Deadline": "5m",
+  "Concurrency": 4,
+  "Linters": {
+    "gofmt": {"Command": "gofmt -s -l $(find . -type f -name '*.go')"},
+    "goimports": {"Command": "goimports -l -w"},
+    "golint": {"Command": "golint -set_exit_status $(go list ./...)"},
+    "vet": {"Command": "go vet -mod vendor ./..."}
+  },
+  "Exclude": [
+    "hack",
+    "vendor"
+  ],
+
+  "Enable": [
+    "gofmt",
+    "goimports",
+    "golint",
+    "vet"
+  ]
+}
