@@ -1632,77 +1632,77 @@ func AssetNames() []string {
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
 	"BUILD.bazel": buildBazel,
-	"cloudup/resources/addons/authentication.aws/k8s-1.10.yaml": cloudupResourcesAddonsAuthenticationAwsK8s110Yaml,
-	"cloudup/resources/addons/authentication.kope.io/k8s-1.8.yaml": cloudupResourcesAddonsAuthenticationKopeIoK8s18Yaml,
-	"cloudup/resources/addons/core.addons.k8s.io/addon.yaml": cloudupResourcesAddonsCoreAddonsK8sIoAddonYaml,
-	"cloudup/resources/addons/core.addons.k8s.io/k8s-1.7.yaml.template": cloudupResourcesAddonsCoreAddonsK8sIoK8s17YamlTemplate,
-	"cloudup/resources/addons/core.addons.k8s.io/v1.4.0.yaml": cloudupResourcesAddonsCoreAddonsK8sIoV140Yaml,
-	"cloudup/resources/addons/coredns.addons.k8s.io/k8s-1.6.yaml.template": cloudupResourcesAddonsCorednsAddonsK8sIoK8s16YamlTemplate,
-	"cloudup/resources/addons/digitalocean-cloud-controller.addons.k8s.io/k8s-1.8.yaml.template": cloudupResourcesAddonsDigitaloceanCloudControllerAddonsK8sIoK8s18YamlTemplate,
-	"cloudup/resources/addons/dns-controller.addons.k8s.io/k8s-1.6.yaml.template": cloudupResourcesAddonsDnsControllerAddonsK8sIoK8s16YamlTemplate,
-	"cloudup/resources/addons/dns-controller.addons.k8s.io/pre-k8s-1.6.yaml.template": cloudupResourcesAddonsDnsControllerAddonsK8sIoPreK8s16YamlTemplate,
-	"cloudup/resources/addons/external-dns.addons.k8s.io/README.md": cloudupResourcesAddonsExternalDnsAddonsK8sIoReadmeMd,
-	"cloudup/resources/addons/external-dns.addons.k8s.io/k8s-1.6.yaml.template": cloudupResourcesAddonsExternalDnsAddonsK8sIoK8s16YamlTemplate,
-	"cloudup/resources/addons/external-dns.addons.k8s.io/pre-k8s-1.6.yaml.template": cloudupResourcesAddonsExternalDnsAddonsK8sIoPreK8s16YamlTemplate,
-	"cloudup/resources/addons/kube-dns.addons.k8s.io/k8s-1.6.yaml.template": cloudupResourcesAddonsKubeDnsAddonsK8sIoK8s16YamlTemplate,
-	"cloudup/resources/addons/kube-dns.addons.k8s.io/pre-k8s-1.6.yaml.template": cloudupResourcesAddonsKubeDnsAddonsK8sIoPreK8s16YamlTemplate,
-	"cloudup/resources/addons/limit-range.addons.k8s.io/addon.yaml": cloudupResourcesAddonsLimitRangeAddonsK8sIoAddonYaml,
-	"cloudup/resources/addons/limit-range.addons.k8s.io/v1.5.0.yaml": cloudupResourcesAddonsLimitRangeAddonsK8sIoV150Yaml,
-	"cloudup/resources/addons/networking.amazon-vpc-routed-eni/k8s-1.10.yaml.template": cloudupResourcesAddonsNetworkingAmazonVpcRoutedEniK8s110YamlTemplate,
-	"cloudup/resources/addons/networking.amazon-vpc-routed-eni/k8s-1.7.yaml.template": cloudupResourcesAddonsNetworkingAmazonVpcRoutedEniK8s17YamlTemplate,
-	"cloudup/resources/addons/networking.amazon-vpc-routed-eni/k8s-1.8.yaml.template": cloudupResourcesAddonsNetworkingAmazonVpcRoutedEniK8s18YamlTemplate,
-	"cloudup/resources/addons/networking.cilium.io/k8s-1.7.yaml.template": cloudupResourcesAddonsNetworkingCiliumIoK8s17YamlTemplate,
-	"cloudup/resources/addons/networking.flannel/k8s-1.6.yaml.template": cloudupResourcesAddonsNetworkingFlannelK8s16YamlTemplate,
-	"cloudup/resources/addons/networking.flannel/pre-k8s-1.6.yaml.template": cloudupResourcesAddonsNetworkingFlannelPreK8s16YamlTemplate,
-	"cloudup/resources/addons/networking.kope.io/k8s-1.6.yaml": cloudupResourcesAddonsNetworkingKopeIoK8s16Yaml,
-	"cloudup/resources/addons/networking.kope.io/pre-k8s-1.6.yaml": cloudupResourcesAddonsNetworkingKopeIoPreK8s16Yaml,
-	"cloudup/resources/addons/networking.kuberouter/k8s-1.6.yaml.template": cloudupResourcesAddonsNetworkingKuberouterK8s16YamlTemplate,
-	"cloudup/resources/addons/networking.projectcalico.org/k8s-1.6.yaml.template": cloudupResourcesAddonsNetworkingProjectcalicoOrgK8s16YamlTemplate,
-	"cloudup/resources/addons/networking.projectcalico.org/k8s-1.7.yaml.template": cloudupResourcesAddonsNetworkingProjectcalicoOrgK8s17YamlTemplate,
-	"cloudup/resources/addons/networking.projectcalico.org/pre-k8s-1.6.yaml.template": cloudupResourcesAddonsNetworkingProjectcalicoOrgPreK8s16YamlTemplate,
-	"cloudup/resources/addons/networking.projectcalico.org.canal/k8s-1.12.yaml.template": cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s112YamlTemplate,
-	"cloudup/resources/addons/networking.projectcalico.org.canal/k8s-1.6.yaml.template": cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s16YamlTemplate,
-	"cloudup/resources/addons/networking.projectcalico.org.canal/k8s-1.8.yaml.template": cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s18YamlTemplate,
-	"cloudup/resources/addons/networking.projectcalico.org.canal/k8s-1.9.yaml.template": cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s19YamlTemplate,
-	"cloudup/resources/addons/networking.projectcalico.org.canal/pre-k8s-1.6.yaml.template": cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalPreK8s16YamlTemplate,
-	"cloudup/resources/addons/networking.romana/k8s-1.7.yaml.template": cloudupResourcesAddonsNetworkingRomanaK8s17YamlTemplate,
-	"cloudup/resources/addons/networking.weave/k8s-1.6.yaml.template": cloudupResourcesAddonsNetworkingWeaveK8s16YamlTemplate,
-	"cloudup/resources/addons/networking.weave/k8s-1.7.yaml.template": cloudupResourcesAddonsNetworkingWeaveK8s17YamlTemplate,
-	"cloudup/resources/addons/networking.weave/k8s-1.8.yaml.template": cloudupResourcesAddonsNetworkingWeaveK8s18YamlTemplate,
-	"cloudup/resources/addons/networking.weave/pre-k8s-1.6.yaml.template": cloudupResourcesAddonsNetworkingWeavePreK8s16YamlTemplate,
-	"cloudup/resources/addons/node-authorizer.addons.k8s.io/k8s-1.10.yaml.template": cloudupResourcesAddonsNodeAuthorizerAddonsK8sIoK8s110YamlTemplate,
-	"cloudup/resources/addons/podsecuritypolicy.addons.k8s.io/k8s-1.10.yaml.template": cloudupResourcesAddonsPodsecuritypolicyAddonsK8sIoK8s110YamlTemplate,
-	"cloudup/resources/addons/podsecuritypolicy.addons.k8s.io/k8s-1.9.yaml.template": cloudupResourcesAddonsPodsecuritypolicyAddonsK8sIoK8s19YamlTemplate,
-	"cloudup/resources/addons/rbac.addons.k8s.io/k8s-1.8.yaml": cloudupResourcesAddonsRbacAddonsK8sIoK8s18Yaml,
-	"cloudup/resources/addons/scheduler.addons.k8s.io/v1.7.0.yaml": cloudupResourcesAddonsSchedulerAddonsK8sIoV170Yaml,
+	"cloudup/resources/addons/authentication.aws/k8s-1.10.yaml":                                          cloudupResourcesAddonsAuthenticationAwsK8s110Yaml,
+	"cloudup/resources/addons/authentication.kope.io/k8s-1.8.yaml":                                       cloudupResourcesAddonsAuthenticationKopeIoK8s18Yaml,
+	"cloudup/resources/addons/core.addons.k8s.io/addon.yaml":                                             cloudupResourcesAddonsCoreAddonsK8sIoAddonYaml,
+	"cloudup/resources/addons/core.addons.k8s.io/k8s-1.7.yaml.template":                                  cloudupResourcesAddonsCoreAddonsK8sIoK8s17YamlTemplate,
+	"cloudup/resources/addons/core.addons.k8s.io/v1.4.0.yaml":                                            cloudupResourcesAddonsCoreAddonsK8sIoV140Yaml,
+	"cloudup/resources/addons/coredns.addons.k8s.io/k8s-1.6.yaml.template":                               cloudupResourcesAddonsCorednsAddonsK8sIoK8s16YamlTemplate,
+	"cloudup/resources/addons/digitalocean-cloud-controller.addons.k8s.io/k8s-1.8.yaml.template":         cloudupResourcesAddonsDigitaloceanCloudControllerAddonsK8sIoK8s18YamlTemplate,
+	"cloudup/resources/addons/dns-controller.addons.k8s.io/k8s-1.6.yaml.template":                        cloudupResourcesAddonsDnsControllerAddonsK8sIoK8s16YamlTemplate,
+	"cloudup/resources/addons/dns-controller.addons.k8s.io/pre-k8s-1.6.yaml.template":                    cloudupResourcesAddonsDnsControllerAddonsK8sIoPreK8s16YamlTemplate,
+	"cloudup/resources/addons/external-dns.addons.k8s.io/README.md":                                      cloudupResourcesAddonsExternalDnsAddonsK8sIoReadmeMd,
+	"cloudup/resources/addons/external-dns.addons.k8s.io/k8s-1.6.yaml.template":                          cloudupResourcesAddonsExternalDnsAddonsK8sIoK8s16YamlTemplate,
+	"cloudup/resources/addons/external-dns.addons.k8s.io/pre-k8s-1.6.yaml.template":                      cloudupResourcesAddonsExternalDnsAddonsK8sIoPreK8s16YamlTemplate,
+	"cloudup/resources/addons/kube-dns.addons.k8s.io/k8s-1.6.yaml.template":                              cloudupResourcesAddonsKubeDnsAddonsK8sIoK8s16YamlTemplate,
+	"cloudup/resources/addons/kube-dns.addons.k8s.io/pre-k8s-1.6.yaml.template":                          cloudupResourcesAddonsKubeDnsAddonsK8sIoPreK8s16YamlTemplate,
+	"cloudup/resources/addons/limit-range.addons.k8s.io/addon.yaml":                                      cloudupResourcesAddonsLimitRangeAddonsK8sIoAddonYaml,
+	"cloudup/resources/addons/limit-range.addons.k8s.io/v1.5.0.yaml":                                     cloudupResourcesAddonsLimitRangeAddonsK8sIoV150Yaml,
+	"cloudup/resources/addons/networking.amazon-vpc-routed-eni/k8s-1.10.yaml.template":                   cloudupResourcesAddonsNetworkingAmazonVpcRoutedEniK8s110YamlTemplate,
+	"cloudup/resources/addons/networking.amazon-vpc-routed-eni/k8s-1.7.yaml.template":                    cloudupResourcesAddonsNetworkingAmazonVpcRoutedEniK8s17YamlTemplate,
+	"cloudup/resources/addons/networking.amazon-vpc-routed-eni/k8s-1.8.yaml.template":                    cloudupResourcesAddonsNetworkingAmazonVpcRoutedEniK8s18YamlTemplate,
+	"cloudup/resources/addons/networking.cilium.io/k8s-1.7.yaml.template":                                cloudupResourcesAddonsNetworkingCiliumIoK8s17YamlTemplate,
+	"cloudup/resources/addons/networking.flannel/k8s-1.6.yaml.template":                                  cloudupResourcesAddonsNetworkingFlannelK8s16YamlTemplate,
+	"cloudup/resources/addons/networking.flannel/pre-k8s-1.6.yaml.template":                              cloudupResourcesAddonsNetworkingFlannelPreK8s16YamlTemplate,
+	"cloudup/resources/addons/networking.kope.io/k8s-1.6.yaml":                                           cloudupResourcesAddonsNetworkingKopeIoK8s16Yaml,
+	"cloudup/resources/addons/networking.kope.io/pre-k8s-1.6.yaml":                                       cloudupResourcesAddonsNetworkingKopeIoPreK8s16Yaml,
+	"cloudup/resources/addons/networking.kuberouter/k8s-1.6.yaml.template":                               cloudupResourcesAddonsNetworkingKuberouterK8s16YamlTemplate,
+	"cloudup/resources/addons/networking.projectcalico.org/k8s-1.6.yaml.template":                        cloudupResourcesAddonsNetworkingProjectcalicoOrgK8s16YamlTemplate,
+	"cloudup/resources/addons/networking.projectcalico.org/k8s-1.7.yaml.template":                        cloudupResourcesAddonsNetworkingProjectcalicoOrgK8s17YamlTemplate,
+	"cloudup/resources/addons/networking.projectcalico.org/pre-k8s-1.6.yaml.template":                    cloudupResourcesAddonsNetworkingProjectcalicoOrgPreK8s16YamlTemplate,
+	"cloudup/resources/addons/networking.projectcalico.org.canal/k8s-1.12.yaml.template":                 cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s112YamlTemplate,
+	"cloudup/resources/addons/networking.projectcalico.org.canal/k8s-1.6.yaml.template":                  cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s16YamlTemplate,
+	"cloudup/resources/addons/networking.projectcalico.org.canal/k8s-1.8.yaml.template":                  cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s18YamlTemplate,
+	"cloudup/resources/addons/networking.projectcalico.org.canal/k8s-1.9.yaml.template":                  cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s19YamlTemplate,
+	"cloudup/resources/addons/networking.projectcalico.org.canal/pre-k8s-1.6.yaml.template":              cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalPreK8s16YamlTemplate,
+	"cloudup/resources/addons/networking.romana/k8s-1.7.yaml.template":                                   cloudupResourcesAddonsNetworkingRomanaK8s17YamlTemplate,
+	"cloudup/resources/addons/networking.weave/k8s-1.6.yaml.template":                                    cloudupResourcesAddonsNetworkingWeaveK8s16YamlTemplate,
+	"cloudup/resources/addons/networking.weave/k8s-1.7.yaml.template":                                    cloudupResourcesAddonsNetworkingWeaveK8s17YamlTemplate,
+	"cloudup/resources/addons/networking.weave/k8s-1.8.yaml.template":                                    cloudupResourcesAddonsNetworkingWeaveK8s18YamlTemplate,
+	"cloudup/resources/addons/networking.weave/pre-k8s-1.6.yaml.template":                                cloudupResourcesAddonsNetworkingWeavePreK8s16YamlTemplate,
+	"cloudup/resources/addons/node-authorizer.addons.k8s.io/k8s-1.10.yaml.template":                      cloudupResourcesAddonsNodeAuthorizerAddonsK8sIoK8s110YamlTemplate,
+	"cloudup/resources/addons/podsecuritypolicy.addons.k8s.io/k8s-1.10.yaml.template":                    cloudupResourcesAddonsPodsecuritypolicyAddonsK8sIoK8s110YamlTemplate,
+	"cloudup/resources/addons/podsecuritypolicy.addons.k8s.io/k8s-1.9.yaml.template":                     cloudupResourcesAddonsPodsecuritypolicyAddonsK8sIoK8s19YamlTemplate,
+	"cloudup/resources/addons/rbac.addons.k8s.io/k8s-1.8.yaml":                                           cloudupResourcesAddonsRbacAddonsK8sIoK8s18Yaml,
+	"cloudup/resources/addons/scheduler.addons.k8s.io/v1.7.0.yaml":                                       cloudupResourcesAddonsSchedulerAddonsK8sIoV170Yaml,
 	"cloudup/resources/addons/spotinst-kubernetes-cluster-controller.addons.k8s.io/v1.8.0.yaml.template": cloudupResourcesAddonsSpotinstKubernetesClusterControllerAddonsK8sIoV180YamlTemplate,
 	"cloudup/resources/addons/spotinst-kubernetes-cluster-controller.addons.k8s.io/v1.9.0.yaml.template": cloudupResourcesAddonsSpotinstKubernetesClusterControllerAddonsK8sIoV190YamlTemplate,
-	"cloudup/resources/addons/storage-aws.addons.k8s.io/v1.6.0.yaml": cloudupResourcesAddonsStorageAwsAddonsK8sIoV160Yaml,
-	"cloudup/resources/addons/storage-aws.addons.k8s.io/v1.7.0.yaml": cloudupResourcesAddonsStorageAwsAddonsK8sIoV170Yaml,
-	"cloudup/resources/addons/storage-gce.addons.k8s.io/v1.6.0.yaml": cloudupResourcesAddonsStorageGceAddonsK8sIoV160Yaml,
-	"cloudup/resources/addons/storage-gce.addons.k8s.io/v1.7.0.yaml": cloudupResourcesAddonsStorageGceAddonsK8sIoV170Yaml,
-	"nodeup/_automatic_upgrades/_debian_family/files/etc/apt/apt.conf.d/20auto-upgrades": nodeup_automatic_upgrades_debian_familyFilesEtcAptAptConfD20autoUpgrades,
-	"nodeup/_automatic_upgrades/_debian_family/packages/unattended-upgrades": nodeup_automatic_upgrades_debian_familyPackagesUnattendedUpgrades,
-	"nodeup/docker/_systemd/_debian_family/files/opt/kubernetes/helpers/docker-healthcheck": nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerHealthcheck,
-	"nodeup/docker/_systemd/_debian_family/files/opt/kubernetes/helpers/docker-healthcheck.meta": nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerHealthcheckMeta,
-	"nodeup/docker/_systemd/_debian_family/files/opt/kubernetes/helpers/docker-prestart": nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerPrestart,
-	"nodeup/docker/_systemd/_debian_family/files/opt/kubernetes/helpers/docker-prestart.meta": nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerPrestartMeta,
-	"nodeup/docker/_systemd/_debian_family/services/docker-healthcheck.service": nodeupDocker_systemd_debian_familyServicesDockerHealthcheckService,
-	"nodeup/docker/_systemd/_debian_family/services/docker-healthcheck.timer": nodeupDocker_systemd_debian_familyServicesDockerHealthcheckTimer,
-	"nodeup/ntp/_aws/_debian_family/packages/ntp": nodeupNtp_aws_debian_familyPackagesNtp,
-	"nodeup/ntp/_aws/_debian_family/services/ntp": nodeupNtp_aws_debian_familyServicesNtp,
-	"nodeup/ntp/_aws/_rhel_family/packages/ntp": nodeupNtp_aws_rhel_familyPackagesNtp,
-	"nodeup/ntp/_aws/_rhel_family/services/ntpd": nodeupNtp_aws_rhel_familyServicesNtpd,
-	"nodeup/top/_debian_family/packages/apt-transport-https": nodeupTop_debian_familyPackagesAptTransportHttps,
-	"nodeup/top/_debian_family/packages/curl": nodeupTop_debian_familyPackagesCurl,
-	"nodeup/top/_debian_family/packages/nfs-common": nodeupTop_debian_familyPackagesNfsCommon,
-	"nodeup/top/_debian_family/packages/python-apt": nodeupTop_debian_familyPackagesPythonApt,
-	"nodeup/top/_debian_family/packages/socat": nodeupTop_debian_familyPackagesSocat,
-	"nodeup/top/_redhat_family/packages/curl": nodeupTop_redhat_familyPackagesCurl,
-	"nodeup/top/_redhat_family/packages/git": nodeupTop_redhat_familyPackagesGit,
-	"nodeup/top/_redhat_family/packages/python": nodeupTop_redhat_familyPackagesPython,
-	"nodeup/top/_ubuntu/packages/git": nodeupTop_ubuntuPackagesGit,
-	"nodeup/top/_ubuntu/packages/netcat-traditional": nodeupTop_ubuntuPackagesNetcatTraditional,
+	"cloudup/resources/addons/storage-aws.addons.k8s.io/v1.6.0.yaml":                                     cloudupResourcesAddonsStorageAwsAddonsK8sIoV160Yaml,
+	"cloudup/resources/addons/storage-aws.addons.k8s.io/v1.7.0.yaml":                                     cloudupResourcesAddonsStorageAwsAddonsK8sIoV170Yaml,
+	"cloudup/resources/addons/storage-gce.addons.k8s.io/v1.6.0.yaml":                                     cloudupResourcesAddonsStorageGceAddonsK8sIoV160Yaml,
+	"cloudup/resources/addons/storage-gce.addons.k8s.io/v1.7.0.yaml":                                     cloudupResourcesAddonsStorageGceAddonsK8sIoV170Yaml,
+	"nodeup/_automatic_upgrades/_debian_family/files/etc/apt/apt.conf.d/20auto-upgrades":                 nodeup_automatic_upgrades_debian_familyFilesEtcAptAptConfD20autoUpgrades,
+	"nodeup/_automatic_upgrades/_debian_family/packages/unattended-upgrades":                             nodeup_automatic_upgrades_debian_familyPackagesUnattendedUpgrades,
+	"nodeup/docker/_systemd/_debian_family/files/opt/kubernetes/helpers/docker-healthcheck":              nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerHealthcheck,
+	"nodeup/docker/_systemd/_debian_family/files/opt/kubernetes/helpers/docker-healthcheck.meta":         nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerHealthcheckMeta,
+	"nodeup/docker/_systemd/_debian_family/files/opt/kubernetes/helpers/docker-prestart":                 nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerPrestart,
+	"nodeup/docker/_systemd/_debian_family/files/opt/kubernetes/helpers/docker-prestart.meta":            nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerPrestartMeta,
+	"nodeup/docker/_systemd/_debian_family/services/docker-healthcheck.service":                          nodeupDocker_systemd_debian_familyServicesDockerHealthcheckService,
+	"nodeup/docker/_systemd/_debian_family/services/docker-healthcheck.timer":                            nodeupDocker_systemd_debian_familyServicesDockerHealthcheckTimer,
+	"nodeup/ntp/_aws/_debian_family/packages/ntp":                                                        nodeupNtp_aws_debian_familyPackagesNtp,
+	"nodeup/ntp/_aws/_debian_family/services/ntp":                                                        nodeupNtp_aws_debian_familyServicesNtp,
+	"nodeup/ntp/_aws/_rhel_family/packages/ntp":                                                          nodeupNtp_aws_rhel_familyPackagesNtp,
+	"nodeup/ntp/_aws/_rhel_family/services/ntpd":                                                         nodeupNtp_aws_rhel_familyServicesNtpd,
+	"nodeup/top/_debian_family/packages/apt-transport-https":                                             nodeupTop_debian_familyPackagesAptTransportHttps,
+	"nodeup/top/_debian_family/packages/curl":                                                            nodeupTop_debian_familyPackagesCurl,
+	"nodeup/top/_debian_family/packages/nfs-common":                                                      nodeupTop_debian_familyPackagesNfsCommon,
+	"nodeup/top/_debian_family/packages/python-apt":                                                      nodeupTop_debian_familyPackagesPythonApt,
+	"nodeup/top/_debian_family/packages/socat":                                                           nodeupTop_debian_familyPackagesSocat,
+	"nodeup/top/_redhat_family/packages/curl":                                                            nodeupTop_redhat_familyPackagesCurl,
+	"nodeup/top/_redhat_family/packages/git":                                                             nodeupTop_redhat_familyPackagesGit,
+	"nodeup/top/_redhat_family/packages/python":                                                          nodeupTop_redhat_familyPackagesPython,
+	"nodeup/top/_ubuntu/packages/git":                                                                    nodeupTop_ubuntuPackagesGit,
+	"nodeup/top/_ubuntu/packages/netcat-traditional":                                                     nodeupTop_ubuntuPackagesNetcatTraditional,
 }
 
 // AssetDir returns the file names below a certain
@@ -1744,193 +1744,194 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
+
 var _bintree = &bintree{nil, map[string]*bintree{
-	"BUILD.bazel": &bintree{buildBazel, map[string]*bintree{}},
-	"cloudup": &bintree{nil, map[string]*bintree{
-		"resources": &bintree{nil, map[string]*bintree{
-			"addons": &bintree{nil, map[string]*bintree{
-				"authentication.aws": &bintree{nil, map[string]*bintree{
-					"k8s-1.10.yaml": &bintree{cloudupResourcesAddonsAuthenticationAwsK8s110Yaml, map[string]*bintree{}},
+	"BUILD.bazel": {buildBazel, map[string]*bintree{}},
+	"cloudup": {nil, map[string]*bintree{
+		"resources": {nil, map[string]*bintree{
+			"addons": {nil, map[string]*bintree{
+				"authentication.aws": {nil, map[string]*bintree{
+					"k8s-1.10.yaml": {cloudupResourcesAddonsAuthenticationAwsK8s110Yaml, map[string]*bintree{}},
 				}},
-				"authentication.kope.io": &bintree{nil, map[string]*bintree{
-					"k8s-1.8.yaml": &bintree{cloudupResourcesAddonsAuthenticationKopeIoK8s18Yaml, map[string]*bintree{}},
+				"authentication.kope.io": {nil, map[string]*bintree{
+					"k8s-1.8.yaml": {cloudupResourcesAddonsAuthenticationKopeIoK8s18Yaml, map[string]*bintree{}},
 				}},
-				"core.addons.k8s.io": &bintree{nil, map[string]*bintree{
-					"addon.yaml": &bintree{cloudupResourcesAddonsCoreAddonsK8sIoAddonYaml, map[string]*bintree{}},
-					"k8s-1.7.yaml.template": &bintree{cloudupResourcesAddonsCoreAddonsK8sIoK8s17YamlTemplate, map[string]*bintree{}},
-					"v1.4.0.yaml": &bintree{cloudupResourcesAddonsCoreAddonsK8sIoV140Yaml, map[string]*bintree{}},
+				"core.addons.k8s.io": {nil, map[string]*bintree{
+					"addon.yaml":            {cloudupResourcesAddonsCoreAddonsK8sIoAddonYaml, map[string]*bintree{}},
+					"k8s-1.7.yaml.template": {cloudupResourcesAddonsCoreAddonsK8sIoK8s17YamlTemplate, map[string]*bintree{}},
+					"v1.4.0.yaml":           {cloudupResourcesAddonsCoreAddonsK8sIoV140Yaml, map[string]*bintree{}},
 				}},
-				"coredns.addons.k8s.io": &bintree{nil, map[string]*bintree{
-					"k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsCorednsAddonsK8sIoK8s16YamlTemplate, map[string]*bintree{}},
+				"coredns.addons.k8s.io": {nil, map[string]*bintree{
+					"k8s-1.6.yaml.template": {cloudupResourcesAddonsCorednsAddonsK8sIoK8s16YamlTemplate, map[string]*bintree{}},
 				}},
-				"digitalocean-cloud-controller.addons.k8s.io": &bintree{nil, map[string]*bintree{
-					"k8s-1.8.yaml.template": &bintree{cloudupResourcesAddonsDigitaloceanCloudControllerAddonsK8sIoK8s18YamlTemplate, map[string]*bintree{}},
+				"digitalocean-cloud-controller.addons.k8s.io": {nil, map[string]*bintree{
+					"k8s-1.8.yaml.template": {cloudupResourcesAddonsDigitaloceanCloudControllerAddonsK8sIoK8s18YamlTemplate, map[string]*bintree{}},
 				}},
-				"dns-controller.addons.k8s.io": &bintree{nil, map[string]*bintree{
-					"k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsDnsControllerAddonsK8sIoK8s16YamlTemplate, map[string]*bintree{}},
-					"pre-k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsDnsControllerAddonsK8sIoPreK8s16YamlTemplate, map[string]*bintree{}},
+				"dns-controller.addons.k8s.io": {nil, map[string]*bintree{
+					"k8s-1.6.yaml.template":     {cloudupResourcesAddonsDnsControllerAddonsK8sIoK8s16YamlTemplate, map[string]*bintree{}},
+					"pre-k8s-1.6.yaml.template": {cloudupResourcesAddonsDnsControllerAddonsK8sIoPreK8s16YamlTemplate, map[string]*bintree{}},
 				}},
-				"external-dns.addons.k8s.io": &bintree{nil, map[string]*bintree{
-					"README.md": &bintree{cloudupResourcesAddonsExternalDnsAddonsK8sIoReadmeMd, map[string]*bintree{}},
-					"k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsExternalDnsAddonsK8sIoK8s16YamlTemplate, map[string]*bintree{}},
-					"pre-k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsExternalDnsAddonsK8sIoPreK8s16YamlTemplate, map[string]*bintree{}},
+				"external-dns.addons.k8s.io": {nil, map[string]*bintree{
+					"README.md":                 {cloudupResourcesAddonsExternalDnsAddonsK8sIoReadmeMd, map[string]*bintree{}},
+					"k8s-1.6.yaml.template":     {cloudupResourcesAddonsExternalDnsAddonsK8sIoK8s16YamlTemplate, map[string]*bintree{}},
+					"pre-k8s-1.6.yaml.template": {cloudupResourcesAddonsExternalDnsAddonsK8sIoPreK8s16YamlTemplate, map[string]*bintree{}},
 				}},
-				"kube-dns.addons.k8s.io": &bintree{nil, map[string]*bintree{
-					"k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsKubeDnsAddonsK8sIoK8s16YamlTemplate, map[string]*bintree{}},
-					"pre-k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsKubeDnsAddonsK8sIoPreK8s16YamlTemplate, map[string]*bintree{}},
+				"kube-dns.addons.k8s.io": {nil, map[string]*bintree{
+					"k8s-1.6.yaml.template":     {cloudupResourcesAddonsKubeDnsAddonsK8sIoK8s16YamlTemplate, map[string]*bintree{}},
+					"pre-k8s-1.6.yaml.template": {cloudupResourcesAddonsKubeDnsAddonsK8sIoPreK8s16YamlTemplate, map[string]*bintree{}},
 				}},
-				"limit-range.addons.k8s.io": &bintree{nil, map[string]*bintree{
-					"addon.yaml": &bintree{cloudupResourcesAddonsLimitRangeAddonsK8sIoAddonYaml, map[string]*bintree{}},
-					"v1.5.0.yaml": &bintree{cloudupResourcesAddonsLimitRangeAddonsK8sIoV150Yaml, map[string]*bintree{}},
+				"limit-range.addons.k8s.io": {nil, map[string]*bintree{
+					"addon.yaml":  {cloudupResourcesAddonsLimitRangeAddonsK8sIoAddonYaml, map[string]*bintree{}},
+					"v1.5.0.yaml": {cloudupResourcesAddonsLimitRangeAddonsK8sIoV150Yaml, map[string]*bintree{}},
 				}},
-				"networking.amazon-vpc-routed-eni": &bintree{nil, map[string]*bintree{
-					"k8s-1.10.yaml.template": &bintree{cloudupResourcesAddonsNetworkingAmazonVpcRoutedEniK8s110YamlTemplate, map[string]*bintree{}},
-					"k8s-1.7.yaml.template": &bintree{cloudupResourcesAddonsNetworkingAmazonVpcRoutedEniK8s17YamlTemplate, map[string]*bintree{}},
-					"k8s-1.8.yaml.template": &bintree{cloudupResourcesAddonsNetworkingAmazonVpcRoutedEniK8s18YamlTemplate, map[string]*bintree{}},
+				"networking.amazon-vpc-routed-eni": {nil, map[string]*bintree{
+					"k8s-1.10.yaml.template": {cloudupResourcesAddonsNetworkingAmazonVpcRoutedEniK8s110YamlTemplate, map[string]*bintree{}},
+					"k8s-1.7.yaml.template":  {cloudupResourcesAddonsNetworkingAmazonVpcRoutedEniK8s17YamlTemplate, map[string]*bintree{}},
+					"k8s-1.8.yaml.template":  {cloudupResourcesAddonsNetworkingAmazonVpcRoutedEniK8s18YamlTemplate, map[string]*bintree{}},
 				}},
-				"networking.cilium.io": &bintree{nil, map[string]*bintree{
-					"k8s-1.7.yaml.template": &bintree{cloudupResourcesAddonsNetworkingCiliumIoK8s17YamlTemplate, map[string]*bintree{}},
+				"networking.cilium.io": {nil, map[string]*bintree{
+					"k8s-1.7.yaml.template": {cloudupResourcesAddonsNetworkingCiliumIoK8s17YamlTemplate, map[string]*bintree{}},
 				}},
-				"networking.flannel": &bintree{nil, map[string]*bintree{
-					"k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsNetworkingFlannelK8s16YamlTemplate, map[string]*bintree{}},
-					"pre-k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsNetworkingFlannelPreK8s16YamlTemplate, map[string]*bintree{}},
+				"networking.flannel": {nil, map[string]*bintree{
+					"k8s-1.6.yaml.template":     {cloudupResourcesAddonsNetworkingFlannelK8s16YamlTemplate, map[string]*bintree{}},
+					"pre-k8s-1.6.yaml.template": {cloudupResourcesAddonsNetworkingFlannelPreK8s16YamlTemplate, map[string]*bintree{}},
 				}},
-				"networking.kope.io": &bintree{nil, map[string]*bintree{
-					"k8s-1.6.yaml": &bintree{cloudupResourcesAddonsNetworkingKopeIoK8s16Yaml, map[string]*bintree{}},
-					"pre-k8s-1.6.yaml": &bintree{cloudupResourcesAddonsNetworkingKopeIoPreK8s16Yaml, map[string]*bintree{}},
+				"networking.kope.io": {nil, map[string]*bintree{
+					"k8s-1.6.yaml":     {cloudupResourcesAddonsNetworkingKopeIoK8s16Yaml, map[string]*bintree{}},
+					"pre-k8s-1.6.yaml": {cloudupResourcesAddonsNetworkingKopeIoPreK8s16Yaml, map[string]*bintree{}},
 				}},
-				"networking.kuberouter": &bintree{nil, map[string]*bintree{
-					"k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsNetworkingKuberouterK8s16YamlTemplate, map[string]*bintree{}},
+				"networking.kuberouter": {nil, map[string]*bintree{
+					"k8s-1.6.yaml.template": {cloudupResourcesAddonsNetworkingKuberouterK8s16YamlTemplate, map[string]*bintree{}},
 				}},
-				"networking.projectcalico.org": &bintree{nil, map[string]*bintree{
-					"k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsNetworkingProjectcalicoOrgK8s16YamlTemplate, map[string]*bintree{}},
-					"k8s-1.7.yaml.template": &bintree{cloudupResourcesAddonsNetworkingProjectcalicoOrgK8s17YamlTemplate, map[string]*bintree{}},
-					"pre-k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsNetworkingProjectcalicoOrgPreK8s16YamlTemplate, map[string]*bintree{}},
+				"networking.projectcalico.org": {nil, map[string]*bintree{
+					"k8s-1.6.yaml.template":     {cloudupResourcesAddonsNetworkingProjectcalicoOrgK8s16YamlTemplate, map[string]*bintree{}},
+					"k8s-1.7.yaml.template":     {cloudupResourcesAddonsNetworkingProjectcalicoOrgK8s17YamlTemplate, map[string]*bintree{}},
+					"pre-k8s-1.6.yaml.template": {cloudupResourcesAddonsNetworkingProjectcalicoOrgPreK8s16YamlTemplate, map[string]*bintree{}},
 				}},
-				"networking.projectcalico.org.canal": &bintree{nil, map[string]*bintree{
-					"k8s-1.12.yaml.template": &bintree{cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s112YamlTemplate, map[string]*bintree{}},
-					"k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s16YamlTemplate, map[string]*bintree{}},
-					"k8s-1.8.yaml.template": &bintree{cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s18YamlTemplate, map[string]*bintree{}},
-					"k8s-1.9.yaml.template": &bintree{cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s19YamlTemplate, map[string]*bintree{}},
-					"pre-k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalPreK8s16YamlTemplate, map[string]*bintree{}},
+				"networking.projectcalico.org.canal": {nil, map[string]*bintree{
+					"k8s-1.12.yaml.template":    {cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s112YamlTemplate, map[string]*bintree{}},
+					"k8s-1.6.yaml.template":     {cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s16YamlTemplate, map[string]*bintree{}},
+					"k8s-1.8.yaml.template":     {cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s18YamlTemplate, map[string]*bintree{}},
+					"k8s-1.9.yaml.template":     {cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalK8s19YamlTemplate, map[string]*bintree{}},
+					"pre-k8s-1.6.yaml.template": {cloudupResourcesAddonsNetworkingProjectcalicoOrgCanalPreK8s16YamlTemplate, map[string]*bintree{}},
 				}},
-				"networking.romana": &bintree{nil, map[string]*bintree{
-					"k8s-1.7.yaml.template": &bintree{cloudupResourcesAddonsNetworkingRomanaK8s17YamlTemplate, map[string]*bintree{}},
+				"networking.romana": {nil, map[string]*bintree{
+					"k8s-1.7.yaml.template": {cloudupResourcesAddonsNetworkingRomanaK8s17YamlTemplate, map[string]*bintree{}},
 				}},
-				"networking.weave": &bintree{nil, map[string]*bintree{
-					"k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsNetworkingWeaveK8s16YamlTemplate, map[string]*bintree{}},
-					"k8s-1.7.yaml.template": &bintree{cloudupResourcesAddonsNetworkingWeaveK8s17YamlTemplate, map[string]*bintree{}},
-					"k8s-1.8.yaml.template": &bintree{cloudupResourcesAddonsNetworkingWeaveK8s18YamlTemplate, map[string]*bintree{}},
-					"pre-k8s-1.6.yaml.template": &bintree{cloudupResourcesAddonsNetworkingWeavePreK8s16YamlTemplate, map[string]*bintree{}},
+				"networking.weave": {nil, map[string]*bintree{
+					"k8s-1.6.yaml.template":     {cloudupResourcesAddonsNetworkingWeaveK8s16YamlTemplate, map[string]*bintree{}},
+					"k8s-1.7.yaml.template":     {cloudupResourcesAddonsNetworkingWeaveK8s17YamlTemplate, map[string]*bintree{}},
+					"k8s-1.8.yaml.template":     {cloudupResourcesAddonsNetworkingWeaveK8s18YamlTemplate, map[string]*bintree{}},
+					"pre-k8s-1.6.yaml.template": {cloudupResourcesAddonsNetworkingWeavePreK8s16YamlTemplate, map[string]*bintree{}},
 				}},
-				"node-authorizer.addons.k8s.io": &bintree{nil, map[string]*bintree{
-					"k8s-1.10.yaml.template": &bintree{cloudupResourcesAddonsNodeAuthorizerAddonsK8sIoK8s110YamlTemplate, map[string]*bintree{}},
+				"node-authorizer.addons.k8s.io": {nil, map[string]*bintree{
+					"k8s-1.10.yaml.template": {cloudupResourcesAddonsNodeAuthorizerAddonsK8sIoK8s110YamlTemplate, map[string]*bintree{}},
 				}},
-				"podsecuritypolicy.addons.k8s.io": &bintree{nil, map[string]*bintree{
-					"k8s-1.10.yaml.template": &bintree{cloudupResourcesAddonsPodsecuritypolicyAddonsK8sIoK8s110YamlTemplate, map[string]*bintree{}},
-					"k8s-1.9.yaml.template": &bintree{cloudupResourcesAddonsPodsecuritypolicyAddonsK8sIoK8s19YamlTemplate, map[string]*bintree{}},
+				"podsecuritypolicy.addons.k8s.io": {nil, map[string]*bintree{
+					"k8s-1.10.yaml.template": {cloudupResourcesAddonsPodsecuritypolicyAddonsK8sIoK8s110YamlTemplate, map[string]*bintree{}},
+					"k8s-1.9.yaml.template":  {cloudupResourcesAddonsPodsecuritypolicyAddonsK8sIoK8s19YamlTemplate, map[string]*bintree{}},
 				}},
-				"rbac.addons.k8s.io": &bintree{nil, map[string]*bintree{
-					"k8s-1.8.yaml": &bintree{cloudupResourcesAddonsRbacAddonsK8sIoK8s18Yaml, map[string]*bintree{}},
+				"rbac.addons.k8s.io": {nil, map[string]*bintree{
+					"k8s-1.8.yaml": {cloudupResourcesAddonsRbacAddonsK8sIoK8s18Yaml, map[string]*bintree{}},
 				}},
-				"scheduler.addons.k8s.io": &bintree{nil, map[string]*bintree{
-					"v1.7.0.yaml": &bintree{cloudupResourcesAddonsSchedulerAddonsK8sIoV170Yaml, map[string]*bintree{}},
+				"scheduler.addons.k8s.io": {nil, map[string]*bintree{
+					"v1.7.0.yaml": {cloudupResourcesAddonsSchedulerAddonsK8sIoV170Yaml, map[string]*bintree{}},
 				}},
-				"spotinst-kubernetes-cluster-controller.addons.k8s.io": &bintree{nil, map[string]*bintree{
-					"v1.8.0.yaml.template": &bintree{cloudupResourcesAddonsSpotinstKubernetesClusterControllerAddonsK8sIoV180YamlTemplate, map[string]*bintree{}},
-					"v1.9.0.yaml.template": &bintree{cloudupResourcesAddonsSpotinstKubernetesClusterControllerAddonsK8sIoV190YamlTemplate, map[string]*bintree{}},
+				"spotinst-kubernetes-cluster-controller.addons.k8s.io": {nil, map[string]*bintree{
+					"v1.8.0.yaml.template": {cloudupResourcesAddonsSpotinstKubernetesClusterControllerAddonsK8sIoV180YamlTemplate, map[string]*bintree{}},
+					"v1.9.0.yaml.template": {cloudupResourcesAddonsSpotinstKubernetesClusterControllerAddonsK8sIoV190YamlTemplate, map[string]*bintree{}},
 				}},
-				"storage-aws.addons.k8s.io": &bintree{nil, map[string]*bintree{
-					"v1.6.0.yaml": &bintree{cloudupResourcesAddonsStorageAwsAddonsK8sIoV160Yaml, map[string]*bintree{}},
-					"v1.7.0.yaml": &bintree{cloudupResourcesAddonsStorageAwsAddonsK8sIoV170Yaml, map[string]*bintree{}},
+				"storage-aws.addons.k8s.io": {nil, map[string]*bintree{
+					"v1.6.0.yaml": {cloudupResourcesAddonsStorageAwsAddonsK8sIoV160Yaml, map[string]*bintree{}},
+					"v1.7.0.yaml": {cloudupResourcesAddonsStorageAwsAddonsK8sIoV170Yaml, map[string]*bintree{}},
 				}},
-				"storage-gce.addons.k8s.io": &bintree{nil, map[string]*bintree{
-					"v1.6.0.yaml": &bintree{cloudupResourcesAddonsStorageGceAddonsK8sIoV160Yaml, map[string]*bintree{}},
-					"v1.7.0.yaml": &bintree{cloudupResourcesAddonsStorageGceAddonsK8sIoV170Yaml, map[string]*bintree{}},
+				"storage-gce.addons.k8s.io": {nil, map[string]*bintree{
+					"v1.6.0.yaml": {cloudupResourcesAddonsStorageGceAddonsK8sIoV160Yaml, map[string]*bintree{}},
+					"v1.7.0.yaml": {cloudupResourcesAddonsStorageGceAddonsK8sIoV170Yaml, map[string]*bintree{}},
 				}},
 			}},
 		}},
 	}},
-	"nodeup": &bintree{nil, map[string]*bintree{
-		"_automatic_upgrades": &bintree{nil, map[string]*bintree{
-			"_debian_family": &bintree{nil, map[string]*bintree{
-				"files": &bintree{nil, map[string]*bintree{
-					"etc": &bintree{nil, map[string]*bintree{
-						"apt": &bintree{nil, map[string]*bintree{
-							"apt.conf.d": &bintree{nil, map[string]*bintree{
-								"20auto-upgrades": &bintree{nodeup_automatic_upgrades_debian_familyFilesEtcAptAptConfD20autoUpgrades, map[string]*bintree{}},
+	"nodeup": {nil, map[string]*bintree{
+		"_automatic_upgrades": {nil, map[string]*bintree{
+			"_debian_family": {nil, map[string]*bintree{
+				"files": {nil, map[string]*bintree{
+					"etc": {nil, map[string]*bintree{
+						"apt": {nil, map[string]*bintree{
+							"apt.conf.d": {nil, map[string]*bintree{
+								"20auto-upgrades": {nodeup_automatic_upgrades_debian_familyFilesEtcAptAptConfD20autoUpgrades, map[string]*bintree{}},
 							}},
 						}},
 					}},
 				}},
-				"packages": &bintree{nil, map[string]*bintree{
-					"unattended-upgrades": &bintree{nodeup_automatic_upgrades_debian_familyPackagesUnattendedUpgrades, map[string]*bintree{}},
+				"packages": {nil, map[string]*bintree{
+					"unattended-upgrades": {nodeup_automatic_upgrades_debian_familyPackagesUnattendedUpgrades, map[string]*bintree{}},
 				}},
 			}},
 		}},
-		"docker": &bintree{nil, map[string]*bintree{
-			"_systemd": &bintree{nil, map[string]*bintree{
-				"_debian_family": &bintree{nil, map[string]*bintree{
-					"files": &bintree{nil, map[string]*bintree{
-						"opt": &bintree{nil, map[string]*bintree{
-							"kubernetes": &bintree{nil, map[string]*bintree{
-								"helpers": &bintree{nil, map[string]*bintree{
-									"docker-healthcheck": &bintree{nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerHealthcheck, map[string]*bintree{}},
-									"docker-healthcheck.meta": &bintree{nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerHealthcheckMeta, map[string]*bintree{}},
-									"docker-prestart": &bintree{nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerPrestart, map[string]*bintree{}},
-									"docker-prestart.meta": &bintree{nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerPrestartMeta, map[string]*bintree{}},
+		"docker": {nil, map[string]*bintree{
+			"_systemd": {nil, map[string]*bintree{
+				"_debian_family": {nil, map[string]*bintree{
+					"files": {nil, map[string]*bintree{
+						"opt": {nil, map[string]*bintree{
+							"kubernetes": {nil, map[string]*bintree{
+								"helpers": {nil, map[string]*bintree{
+									"docker-healthcheck":      {nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerHealthcheck, map[string]*bintree{}},
+									"docker-healthcheck.meta": {nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerHealthcheckMeta, map[string]*bintree{}},
+									"docker-prestart":         {nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerPrestart, map[string]*bintree{}},
+									"docker-prestart.meta":    {nodeupDocker_systemd_debian_familyFilesOptKubernetesHelpersDockerPrestartMeta, map[string]*bintree{}},
 								}},
 							}},
 						}},
 					}},
-					"services": &bintree{nil, map[string]*bintree{
-						"docker-healthcheck.service": &bintree{nodeupDocker_systemd_debian_familyServicesDockerHealthcheckService, map[string]*bintree{}},
-						"docker-healthcheck.timer": &bintree{nodeupDocker_systemd_debian_familyServicesDockerHealthcheckTimer, map[string]*bintree{}},
+					"services": {nil, map[string]*bintree{
+						"docker-healthcheck.service": {nodeupDocker_systemd_debian_familyServicesDockerHealthcheckService, map[string]*bintree{}},
+						"docker-healthcheck.timer":   {nodeupDocker_systemd_debian_familyServicesDockerHealthcheckTimer, map[string]*bintree{}},
 					}},
 				}},
 			}},
 		}},
-		"ntp": &bintree{nil, map[string]*bintree{
-			"_aws": &bintree{nil, map[string]*bintree{
-				"_debian_family": &bintree{nil, map[string]*bintree{
-					"packages": &bintree{nil, map[string]*bintree{
-						"ntp": &bintree{nodeupNtp_aws_debian_familyPackagesNtp, map[string]*bintree{}},
+		"ntp": {nil, map[string]*bintree{
+			"_aws": {nil, map[string]*bintree{
+				"_debian_family": {nil, map[string]*bintree{
+					"packages": {nil, map[string]*bintree{
+						"ntp": {nodeupNtp_aws_debian_familyPackagesNtp, map[string]*bintree{}},
 					}},
-					"services": &bintree{nil, map[string]*bintree{
-						"ntp": &bintree{nodeupNtp_aws_debian_familyServicesNtp, map[string]*bintree{}},
+					"services": {nil, map[string]*bintree{
+						"ntp": {nodeupNtp_aws_debian_familyServicesNtp, map[string]*bintree{}},
 					}},
 				}},
-				"_rhel_family": &bintree{nil, map[string]*bintree{
-					"packages": &bintree{nil, map[string]*bintree{
-						"ntp": &bintree{nodeupNtp_aws_rhel_familyPackagesNtp, map[string]*bintree{}},
+				"_rhel_family": {nil, map[string]*bintree{
+					"packages": {nil, map[string]*bintree{
+						"ntp": {nodeupNtp_aws_rhel_familyPackagesNtp, map[string]*bintree{}},
 					}},
-					"services": &bintree{nil, map[string]*bintree{
-						"ntpd": &bintree{nodeupNtp_aws_rhel_familyServicesNtpd, map[string]*bintree{}},
+					"services": {nil, map[string]*bintree{
+						"ntpd": {nodeupNtp_aws_rhel_familyServicesNtpd, map[string]*bintree{}},
 					}},
 				}},
 			}},
 		}},
-		"top": &bintree{nil, map[string]*bintree{
-			"_debian_family": &bintree{nil, map[string]*bintree{
-				"packages": &bintree{nil, map[string]*bintree{
-					"apt-transport-https": &bintree{nodeupTop_debian_familyPackagesAptTransportHttps, map[string]*bintree{}},
-					"curl": &bintree{nodeupTop_debian_familyPackagesCurl, map[string]*bintree{}},
-					"nfs-common": &bintree{nodeupTop_debian_familyPackagesNfsCommon, map[string]*bintree{}},
-					"python-apt": &bintree{nodeupTop_debian_familyPackagesPythonApt, map[string]*bintree{}},
-					"socat": &bintree{nodeupTop_debian_familyPackagesSocat, map[string]*bintree{}},
+		"top": {nil, map[string]*bintree{
+			"_debian_family": {nil, map[string]*bintree{
+				"packages": {nil, map[string]*bintree{
+					"apt-transport-https": {nodeupTop_debian_familyPackagesAptTransportHttps, map[string]*bintree{}},
+					"curl":                {nodeupTop_debian_familyPackagesCurl, map[string]*bintree{}},
+					"nfs-common":          {nodeupTop_debian_familyPackagesNfsCommon, map[string]*bintree{}},
+					"python-apt":          {nodeupTop_debian_familyPackagesPythonApt, map[string]*bintree{}},
+					"socat":               {nodeupTop_debian_familyPackagesSocat, map[string]*bintree{}},
 				}},
 			}},
-			"_redhat_family": &bintree{nil, map[string]*bintree{
-				"packages": &bintree{nil, map[string]*bintree{
-					"curl": &bintree{nodeupTop_redhat_familyPackagesCurl, map[string]*bintree{}},
-					"git": &bintree{nodeupTop_redhat_familyPackagesGit, map[string]*bintree{}},
-					"python": &bintree{nodeupTop_redhat_familyPackagesPython, map[string]*bintree{}},
+			"_redhat_family": {nil, map[string]*bintree{
+				"packages": {nil, map[string]*bintree{
+					"curl":   {nodeupTop_redhat_familyPackagesCurl, map[string]*bintree{}},
+					"git":    {nodeupTop_redhat_familyPackagesGit, map[string]*bintree{}},
+					"python": {nodeupTop_redhat_familyPackagesPython, map[string]*bintree{}},
 				}},
 			}},
-			"_ubuntu": &bintree{nil, map[string]*bintree{
-				"packages": &bintree{nil, map[string]*bintree{
-					"git": &bintree{nodeupTop_ubuntuPackagesGit, map[string]*bintree{}},
-					"netcat-traditional": &bintree{nodeupTop_ubuntuPackagesNetcatTraditional, map[string]*bintree{}},
+			"_ubuntu": {nil, map[string]*bintree{
+				"packages": {nil, map[string]*bintree{
+					"git":                {nodeupTop_ubuntuPackagesGit, map[string]*bintree{}},
+					"netcat-traditional": {nodeupTop_ubuntuPackagesNetcatTraditional, map[string]*bintree{}},
 				}},
 			}},
 		}},
@@ -1983,4 +1984,3 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
-

@@ -1,9 +1,9 @@
 # terraform-provider-kops - WIP
 
-[![Build Status](https://travis-ci.org/WanderaOrg/terraform-provider-kops.svg?branch=master)](https://travis-ci.org/WanderaOrg/terraform-provider-kops)
-[![Go Report Card](https://goreportcard.com/badge/github.com/WanderaOrg/terraform-provider-kops)](https://goreportcard.com/report/github.com/WanderaOrg/terraform-provider-kops)
-[![GitHub release](https://img.shields.io/github/release/WanderaOrg/terraform-provider-kops.svg)](https://github.com/WanderaOrg/terraform-provider-kops/releases/latest)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/WanderaOrg/terraform-provider-kops/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/wandera/terraform-provider-kops.svg?branch=master)](https://travis-ci.org/wandera/terraform-provider-kops)
+[![Go Report Card](https://goreportcard.com/badge/github.com/wandera/terraform-provider-kops)](https://goreportcard.com/report/github.com/wandera/terraform-provider-kops)
+[![GitHub release](https://img.shields.io/github/release/wandera/terraform-provider-kops.svg)](https://github.com/wandera/terraform-provider-kops/releases/latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/wandera/terraform-provider-kops/blob/master/LICENSE)
 
 # Road to 0.0.1-alpha
 - [x] Implement kops/v1alpha2/Cluster flattening to TF state
