@@ -1,4 +1,4 @@
-module github.com/WanderaOrg/terraform-provider-kops
+module github.com/wandera/terraform-provider-kops
 
 require (
 	cloud.google.com/go v0.28.0 // indirect

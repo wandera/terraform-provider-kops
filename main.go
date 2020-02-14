@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/WanderaOrg/terraform-provider-kops/kops"
 	"github.com/hashicorp/terraform/plugin"
+	"github.com/wandera/terraform-provider-kops/kops"
 )
 
 func main() {
