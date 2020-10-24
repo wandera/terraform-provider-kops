@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kopsapi "k8s.io/kops/pkg/apis/kops"
 )
 
@@ -71,7 +71,7 @@ func expandClusterSpec(data map[string]interface{}) kopsapi.ClusterSpec {
 		clusterspec.Subnets = expandClusterSubnetSpec(top.([]interface{}))
 	}
 	clusterspec.ServiceClusterIPRange = data["service_cluster_iprange"].(string)
-	clusterspec.SSHKeyName = data["sshkey_name"].(string)
+	clusterspec.SSHKeyName = data["sshkey_name"].(*string)
 	if top, ok := data["topology"]; ok {
 		clusterspec.Topology = expandClusterTopology(top.([]interface{}))
 	}

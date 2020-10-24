@@ -1,6 +1,8 @@
 package kops
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform/helper/schema"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/kops/pkg/apis/kops"
@@ -28,15 +30,17 @@ func resourceCluster() *schema.Resource {
 func resourceClusterCreate(d *schema.ResourceData, m interface{}) error {
 	clientset := m.(*ProviderConfig).clientset
 
-	cluster, err := clientset.CreateCluster(&kops.Cluster{
-		ObjectMeta: expandObjectMeta(sectionData(d, "metadata")),
-		Spec:       expandClusterSpec(sectionData(d, "spec")),
-	})
+	cluster, err := clientset.CreateCluster(
+		context.Background(),
+		&kops.Cluster{
+			ObjectMeta: expandObjectMeta(sectionData(d, "metadata")),
+			Spec:       expandClusterSpec(sectionData(d, "spec")),
+		})
 	if err != nil {
 		return err
 	}
 
-	cluster, err = clientset.GetCluster(cluster.Name)
+	cluster, err = clientset.GetCluster(context.Background(), cluster.Name)
 	if err != nil {
 		return err
 	}
@@ -47,7 +51,7 @@ func resourceClusterCreate(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	_, err = clientset.UpdateCluster(fullCluster, nil)
+	_, err = clientset.UpdateCluster(context.Background(), fullCluster, nil)
 	if err != nil {
 		return err
 	}
@@ -79,10 +83,12 @@ func resourceClusterUpdate(d *schema.ResourceData, m interface{}) error {
 
 	clientset := m.(*ProviderConfig).clientset
 
-	_, err := clientset.UpdateCluster(&kops.Cluster{
-		ObjectMeta: expandObjectMeta(sectionData(d, "metadata")),
-		Spec:       expandClusterSpec(sectionData(d, "spec")),
-	}, nil)
+	_, err := clientset.UpdateCluster(
+		context.Background(),
+		&kops.Cluster{
+			ObjectMeta: expandObjectMeta(sectionData(d, "metadata")),
+			Spec:       expandClusterSpec(sectionData(d, "spec")),
+		}, nil)
 
 	if err != nil {
 		return err
@@ -98,7 +104,7 @@ func resourceClusterDelete(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	return clientset.DeleteCluster(cluster)
+	return clientset.DeleteCluster(context.Background(), cluster)
 }
 
 func resourceClusterExists(d *schema.ResourceData, m interface{}) (bool, error) {
@@ -115,7 +121,7 @@ func resourceClusterExists(d *schema.ResourceData, m interface{}) (bool, error) 
 
 func getCluster(d *schema.ResourceData, m interface{}) (*kops.Cluster, error) {
 	clientset := m.(*ProviderConfig).clientset
-	cluster, err := clientset.GetCluster(d.Id())
+	cluster, err := clientset.GetCluster(context.Background(), d.Id())
 	return cluster, err
 }
 
