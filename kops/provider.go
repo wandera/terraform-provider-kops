@@ -2,6 +2,7 @@ package kops
 
 import (
 	"fmt"
+
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
 	"k8s.io/apimachinery/pkg/util/validation/field"
@@ -58,7 +59,7 @@ func configureProvider(data *schema.ResourceData) (interface{}, error) {
 		return nil, field.Invalid(field.NewPath("State Store"), registryPath, invalidStateError)
 	}
 
-	clientset := vfsclientset.NewVFSClientset(basePath, true)
+	clientset := vfsclientset.NewVFSClientset(basePath)
 
 	return &ProviderConfig{
 		clientset:  clientset,

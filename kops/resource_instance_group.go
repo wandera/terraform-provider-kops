@@ -1,12 +1,13 @@
 package kops
 
 import (
+	"context"
 	"fmt"
 	"strings"
 
 	"github.com/hashicorp/terraform/helper/schema"
 	"k8s.io/apimachinery/pkg/api/errors"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kops/pkg/apis/kops"
 	"k8s.io/kops/upup/pkg/fi/cloudup"
 )
@@ -52,15 +53,18 @@ func resourceInstanceGroup() *schema.Resource {
 func resourceInstanceGroupCreate(d *schema.ResourceData, m interface{}) error {
 	clusterName := d.Get("cluster_name").(string)
 	clientset := m.(*ProviderConfig).clientset
-	cluster, err := clientset.GetCluster(clusterName)
+	cluster, err := clientset.GetCluster(context.Background(), clusterName)
 	if err != nil {
 		return err
 	}
 
-	instanceGroup, err := clientset.InstanceGroupsFor(cluster).Create(&kops.InstanceGroup{
-		ObjectMeta: expandObjectMeta(sectionData(d, "metadata")),
-		Spec:       expandInstanceGroupSpec(sectionData(d, "spec")),
-	})
+	instanceGroup, err := clientset.InstanceGroupsFor(cluster).Create(
+		context.Background(),
+		&kops.InstanceGroup{
+			ObjectMeta: expandObjectMeta(sectionData(d, "metadata")),
+			Spec:       expandInstanceGroupSpec(sectionData(d, "spec")),
+		},
+		v1.CreateOptions{})
 	if err != nil {
 		return err
 	}
@@ -75,7 +79,7 @@ func resourceInstanceGroupCreate(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	_, err = clientset.InstanceGroupsFor(cluster).Update(fullInstanceGroup)
+	_, err = clientset.InstanceGroupsFor(cluster).Update(context.Background(), fullInstanceGroup, v1.UpdateOptions{})
 	if err != nil {
 		return err
 	}
@@ -110,15 +114,18 @@ func resourceInstanceGroupUpdate(d *schema.ResourceData, m interface{}) error {
 
 	clusterName := d.Get("cluster_name").(string)
 	clientset := m.(*ProviderConfig).clientset
-	cluster, err := clientset.GetCluster(clusterName)
+	cluster, err := clientset.GetCluster(context.Background(), clusterName)
 	if err != nil {
 		return err
 	}
 
-	_, err = clientset.InstanceGroupsFor(cluster).Update(&kops.InstanceGroup{
-		ObjectMeta: expandObjectMeta(sectionData(d, "metadata")),
-		Spec:       expandInstanceGroupSpec(sectionData(d, "spec")),
-	})
+	_, err = clientset.InstanceGroupsFor(cluster).Update(
+		context.Background(),
+		&kops.InstanceGroup{
+			ObjectMeta: expandObjectMeta(sectionData(d, "metadata")),
+			Spec:       expandInstanceGroupSpec(sectionData(d, "spec")),
+		},
+		v1.UpdateOptions{})
 	if err != nil {
 		return err
 	}
@@ -129,11 +136,11 @@ func resourceInstanceGroupUpdate(d *schema.ResourceData, m interface{}) error {
 func resourceInstanceGroupDelete(d *schema.ResourceData, m interface{}) error {
 	groupID := parseInstanceGroupID(d.Id())
 	clientset := m.(*ProviderConfig).clientset
-	cluster, err := clientset.GetCluster(groupID.clusterName)
+	cluster, err := clientset.GetCluster(context.Background(), groupID.clusterName)
 	if err != nil {
 		return err
 	}
-	return clientset.InstanceGroupsFor(cluster).Delete(groupID.instanceGroupName, &v1.DeleteOptions{})
+	return clientset.InstanceGroupsFor(cluster).Delete(context.Background(), groupID.instanceGroupName, v1.DeleteOptions{})
 }
 
 func resourceInstanceGroupExists(d *schema.ResourceData, m interface{}) (bool, error) {
@@ -151,9 +158,9 @@ func resourceInstanceGroupExists(d *schema.ResourceData, m interface{}) (bool, e
 func getInstanceGroup(d *schema.ResourceData, m interface{}) (*kops.InstanceGroup, error) {
 	groupID := parseInstanceGroupID(d.Id())
 	clientset := m.(*ProviderConfig).clientset
-	cluster, err := clientset.GetCluster(groupID.clusterName)
+	cluster, err := clientset.GetCluster(context.Background(), groupID.clusterName)
 	if err != nil {
 		return nil, err
 	}
-	return clientset.InstanceGroupsFor(cluster).Get(groupID.instanceGroupName, v1.GetOptions{})
+	return clientset.InstanceGroupsFor(cluster).Get(context.Background(), groupID.instanceGroupName, v1.GetOptions{})
 }
